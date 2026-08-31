@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:18
+    container_name: backlogjogos
+    environment:
+      - POSTGRES_USER=postgresql
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bia
+    ports:
+      - 5491:5432
+    volumes:
+        - ./dockerfile/backlog.sql:/docker-entrypoint-initdb.d/backlog.sql
+        - pg_data:/var/lib/postgresql
+    restart: unless-stopped
+volumes:
+  pg_data:
