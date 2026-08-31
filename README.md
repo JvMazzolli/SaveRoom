@@ -27,25 +27,15 @@ Antes de começar, instale:
 
 ## Configure o pgAdmin
     Configure o pgAdmin:
+    Abra o pgAdmin
+    Clique com o botão direito em Servers -> Registrar -> Server.
+    Preencha os campos:
+       Aba Geral:
+       Nome: backlogjogos
+       Aba Connection:
+       Host Name: localhost
+       Port: 5491
+       Maintenance database: postgres
+       UserName: postgresql
+       Password: postgres
 
-Abra o pgAdmin.
-
-Clique com o botão direito em Servers → Registrar → Server.
-
-Preencha os campos:
-
-Aba General
-
-Name: backlogjogos
-
-Aba Connection
-
-Host name/address: localhost
-
-Port: 5491
-
-Maintenance database: postgres
-
-Username: postgresql
-
-Password: postgres
