@@ -1,13 +1,12 @@
 # SaveRoom
 
-markdown
 Backlog de Jogos - Ambiente Docker
 
 Este projeto contém a configuração Docker e o script SQL para inicializar o banco de dados do sistema de backlog de jogos.
 
 ---
 
-## ⚙️ Pré-requisitos
+## Pré-requisitos
 Antes de começar, instale:
 - **PostgreSQL**
 - **Docker Desktop**
@@ -15,7 +14,7 @@ Antes de começar, instale:
 
 ---
 
-## 🚀 Como rodar
+## Como rodar
 
 1. **Clone o repositório:**
    ```bash
