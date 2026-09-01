@@ -11,7 +11,7 @@ services:
     ports:
       - 5491:5432
     volumes:
-        - ./dockerfile/backlog.sql:/docker-entrypoint-initdb.d/backlog.sql
+        - ./backlog.sql:/docker-entrypoint-initdb.d/backlog.sql
         - pg_data:/var/lib/postgresql
     restart: unless-stopped
 volumes:
