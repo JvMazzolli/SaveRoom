@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saveroom — sua coleção de jogos organizada</title>
+<meta name="description" content="Catalogue seus jogos, acompanhe o status de cada um e registre suas avaliações.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="faixa">
+    <a class="marca" href="#" aria-label="Saveroom, página inicial">
+      <span class="marca-icone" aria-hidden="true"></span>
+      <span class="marca-nome">Saveroom</span>
+    </a>
+    <button class="menu-botao" id="menuBotao" aria-expanded="false" aria-controls="navegacao">
+      <span class="menu-barras" aria-hidden="true"></span>
+      Menu
+    </button>
+    <nav class="navegacao" id="navegacao">
+      <ul class="nav-lista">
+        <li><a href="#colecao">Minha coleção</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#avaliacoes">Avaliações</a></li>
+        <li><a href="#perfil">Perfil</a></li>
+      </ul>
+      <div class="nav-acoes">
+        <a class="botao botao-fantasma" href="#entrar">Entrar</a>
+        <a class="botao botao-cheio" href="#cadastro">Criar conta</a>
+      </div>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+  <section class="heroi">
+    <div class="heroi-texto">
+      <h1>Sua biblioteca inteira em uma única sala.</h1>
+      <p class="heroi-sub">
+        Guarde o que você jogou, o que está jogando e o que ainda quer jogar.
+        Anote notas, escreva impressões e veja o que a comunidade achou de cada título.
+      </p>
+      <div class="heroi-acoes">
+        <a class="botao botao-cheio botao-grande" href="#cadastro">Começar minha coleção</a>
+        <a class="botao botao-contorno botao-grande" href="#catalogo">Ver o catálogo</a>
+      </div>
+      <p class="heroi-nota">Dados dos jogos fornecidos pela RAWG Video Games Database.</p>
+    </div>
+    <aside class="slot" aria-label="Resumo da sua coleção">
+      <div class="slot-topo">
+        <span class="slot-id">Slot 01</span>
+        <span class="slot-estado"><span class="ponto" aria-hidden="true"></span>Salvo</span>
+      </div>
+      <p class="slot-usuario">Visitante</p>
+      <p class="slot-data">Última gravação há instantes</p>
+      <dl class="slot-numeros">
+        <div>
+          <dt>Na coleção</dt>
+          <dd id="contaColecao">0</dd>
+        </div>
+        <div>
+          <dt>Jogando</dt>
+          <dd id="contaJogando">0</dd>
+        </div>
+        <div>
+          <dt>Quero jogar</dt>
+          <dd id="contaQuero">0</dd>
+        </div>
+      </dl>
+      <p class="slot-dica">Entre na sua conta para gravar essas informações no seu perfil.</p>
+    </aside>
+  </section>
+  <section class="secao" id="colecao">
+    <div class="secao-cabeca">
+      <h2>Catálogo e coleção</h2>
+      <p class="secao-apoio">Busque um título e defina em que ponto da sua biblioteca ele entra.</p>
+    </div>
+    <div class="controles" id="catalogo">
+      <div class="busca">
+        <label for="campoBusca">Buscar jogo</label>
+        <input type="search" id="campoBusca" placeholder="Digite o nome de um jogo" autocomplete="off">
+      </div>
+      <div class="abas" role="tablist" aria-label="Filtrar por status">
+        <button class="aba aba-ativa" role="tab" aria-selected="true" data-status="todos">Todos</button>
+        <button class="aba" role="tab" aria-selected="false" data-status="jogando">Jogando</button>
+        <button class="aba" role="tab" aria-selected="false" data-status="jogado">Jogado</button>
+        <button class="aba" role="tab" aria-selected="false" data-status="quero">Quero jogar</button>
+      </div>
+    </div>
+    <div class="grade" id="grade" aria-live="polite"></div>
+    <p class="vazio" id="vazio" hidden>
+      Nenhum jogo corresponde a essa busca. Tente outro nome ou volte para a aba “Todos”.
+    </p>
+  </section>
+  <section class="secao secao-avaliacoes" id="avaliacoes">
+    <div class="secao-cabeca">
+      <h2>Avaliações recentes</h2>
+      <p class="secao-apoio">O que outros usuários registraram nos últimos dias.</p>
+    </div>
+    <ul class="avaliacoes">
+      <li class="avaliacao">
+        <div class="avaliacao-topo">
+          <span class="avaliacao-autor">bruna_ss</span>
+          <span class="nota">9,0</span>
+        </div>
+        <h3>Hollow Knight</h3>
+        <p>Demorei para engrenar, mas depois de Greenpath não consegui mais largar. Mapa é uma aula de level design.</p>
+      </li>
+      <li class="avaliacao">
+        <div class="avaliacao-topo">
+          <span class="avaliacao-autor">kauan.dev</span>
+          <span class="nota">7,5</span>
+        </div>
+        <h3>Cyberpunk 2077</h3>
+        <p>As missões secundárias carregam o jogo. Depois das atualizações, a Night City finalmente entrega o que prometia.</p>
+      </li>
+      <li class="avaliacao">
+        <div class="avaliacao-topo">
+          <span class="avaliacao-autor">mvieira</span>
+          <span class="nota">10</span>
+        </div>
+        <h3>Disco Elysium</h3>
+        <p>Terminei e passei uma semana pensando nas escolhas. Melhor escrita que já vi em jogo, sem discussão.</p>
+      </li>
+    </ul>
+  </section>
+  <section class="secao secao-perfil" id="perfil">
+    <div class="perfil-caixa">
+      <h2>Um perfil que mostra o que você joga</h2>
+      <p>
+        Escolha um avatar, escreva sua biografia e deixe sua estante visível para quem visitar seu perfil.
+        Cada avaliação que você registra aparece junto dos jogos correspondentes.
+      </p>
+      <a class="botao botao-cheio botao-grande" href="#cadastro">Criar meu perfil</a>
+    </div>
+  </section>
+</main>
+<footer class="rodape">
+  <div class="rodape-faixa">
+    <p class="rodape-marca">Saveroom</p>
+    <p class="rodape-info">Projeto acadêmico. Informações de jogos obtidas pela API RAWG.</p>
+    <ul class="rodape-links">
+      <li><a href="#catalogo">Catálogo</a></li>
+      <li><a href="#avaliacoes">Avaliações</a></li>
+      <li><a href="#perfil">Perfil</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
