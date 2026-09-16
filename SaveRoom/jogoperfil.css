@@ -1,0 +1,221 @@
+/* ==========================================================
+   Saveroom — Estilos da Página do Jogo (Baseado no Wireframe)
+   ========================================================== */
+
+   .pagina-jogo {
+    max-width: var(--largura);
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  
+  /* --- Colunas --- */
+  .jogo-coluna-esq {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .jogo-coluna-dir {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  /* --- Imagem de Capa e Ações --- */
+  .jogo-poster-box {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .jogo-poster-img {
+    width: 100%;
+    border-radius: var(--raio);
+    border: 1px solid var(--linha);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+    aspect-ratio: 3/4;
+  }
+  
+  .jogo-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .jogo-acoes .botao {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* --- Blocos Genéricos (Cards cinzas do wireframe) --- */
+  .jogo-bloco {
+    background: var(--painel);
+    border: 1px solid var(--linha);
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .jogo-bloco-destaque {
+    background: var(--painel-alto);
+    border-left: 3px solid var(--ambar);
+  }
+  
+  .jogo-bloco-titulo {
+    font-size: 1.3rem;
+    color: var(--papel);
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--linha);
+    padding-bottom: 8px;
+  }
+  
+  .jogo-texto {
+    color: var(--apagado);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  /* --- Info do Jogo (Lista) --- */
+  .jogo-info-lista {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .jogo-info-lista dt {
+    font-size: 0.85rem;
+    color: var(--apagado);
+  }
+  
+  .jogo-info-lista dd {
+    margin: 0;
+    font-family: var(--fonte-corpo);
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--papel);
+  }
+  
+  .jogo-info-nota {
+    color: var(--ambar) !important;
+    font-family: var(--fonte-titulo) !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+  }
+  
+  /* --- Cabeçalho Direito --- */
+  .jogo-cabecalho h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  
+  /* --- Área de Mídia (Carrossel/Vídeos) --- */
+  .jogo-midia-destaque {
+    width: 100%;
+    background: #000;
+    border: 1px solid var(--linha);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  
+  .jogo-midia-placeholder {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .jogo-midia-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+  }
+  
+  .jogo-badge-visual {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.7);
+    padding: 6px 12px;
+    border-radius: var(--raio);
+    font-size: 0.8rem;
+    color: var(--papel);
+    backdrop-filter: blur(4px);
+  }
+  
+  /* --- Grade Inferior (Avaliações, Plataformas, Atalho) --- */
+  .jogo-grade-inferior {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 180px;
+    gap: 24px;
+  }
+  
+  /* --- Avaliações Populares Simples --- */
+  .jogo-lista-avaliacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .avaliacao-simples p {
+    font-size: 0.9rem;
+    color: var(--apagado);
+    margin-top: 8px;
+  }
+  
+  .jogo-linha-divisoria {
+    border: 0;
+    border-top: 1px dashed var(--linha);
+    margin: 0;
+  }
+  
+  /* --- Plataformas --- */
+  .jogo-plataformas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .plataforma-tag {
+    background: var(--painel-alto);
+    border: 1px solid var(--linha);
+    color: var(--papel);
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 16px;
+  }
+  
+  /* --- Responsividade --- */
+  @media (max-width: 1024px) {
+    .jogo-grade-inferior {
+      grid-template-columns: 1fr 1fr; /* Atalho desce pra segunda linha */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .pagina-jogo {
+      grid-template-columns: 1fr; /* Colunas empilham */
+      padding-top: 24px;
+    }
+    
+    .jogo-poster-img {
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    
+    .jogo-grade-inferior {
+      grid-template-columns: 1fr;
+    }
+  }
