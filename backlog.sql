@@ -45,6 +45,7 @@ CREATE TABLE backlog (
     id_backlog SERIAL PRIMARY KEY,
     id_perfil INT NOT NULL,
     id_jogo INT NOT NULL,
+    nome_jogo TEXT,
     status VARCHAR(20) CHECK (status IN ('a_jogar','jogando','concluido','platinado','abandonado')),
     data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_conclusao TIMESTAMP,

@@ -1,0 +1,24 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# Configuração local
+appsettings.Development.json
+
+# Docker
+.pgdata/
+
+# Sistema
+.DS_Store
+Thumbs.db

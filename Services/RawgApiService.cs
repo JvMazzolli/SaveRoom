@@ -9,7 +9,7 @@ namespace Saveroom.Services
     public class RawgApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = "!!!!!!!!!!!!!!!!!!!!!!!!!!!CHAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"; 
+        private readonly string _apiKey = "7b84045ceb7445ae80bcf0e59933e103"; 
 
         public RawgApiService(HttpClient httpClient)
         {
@@ -44,5 +44,7 @@ namespace Saveroom.Services
             
             return apiResponse?.Results ?? new List<RedditPost>();
         }
+        
     }
+    
 }
