@@ -31,6 +31,5 @@ namespace SaveRoom.Controllers
                 return StatusCode(500, new { mensagem = "Erro interno no servidor", detallhe  = ex.Message});
             }
         }
-
     }
 }

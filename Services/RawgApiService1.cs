@@ -20,7 +20,21 @@ namespace SaveRoom.Services
             _apiChave = configuration["RawgApi:ApiChave"]
                 ?? throw new InvalidOperationException("A chave 'RawgApi:ApiChave' não fopi configurada corretamente.");
         }
-        public async Task<RawgResponseDto<RawDtos<Plataforms>>?>ObterJogosAsync(RawGameFilter filter)
+
+        public async Task<RawgGameDetailsDto?> ObterDetalhesdosJogos(int id)
+        {
+            var response =
+                await _httpClient.GetAsync(
+                    $"games/{id}?key={_apiChave}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            var json = 
+                await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<RawgGameDetailsDto>(json);
+        } 
+        public async Task<RawgResponseDto<RawDtos<Platforms>>?>ObterJogosAsync(RawGameFilter filter)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["key"] = _apiChave;
@@ -43,7 +57,26 @@ namespace SaveRoom.Services
                 throw new HttpRequestException($"Erro na RAWG ({response.StatusCode}): {erro}");
             }
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<RawgResponseDto<RawDtos<Plataforms>>>(json);
+            return JsonSerializer.Deserialize<RawgResponseDto<RawDtos<Platforms>>>(json);
         }
+        public async Task<List<RawgAchievementDto>> ObterConquistasDoJogoAsync(int idRawg)
+{
+    var url = $"games/{idRawg}/achievements?key={_apiChave}";
+    
+    var response = await _httpClient.GetAsync(url);
+    if (!response.IsSuccessStatusCode)
+    {
+        return new List<RawgAchievementDto>();
+    }
+
+    var content = await response.Content.ReadAsStringAsync();
+    var resultado = JsonSerializer.Deserialize<RawgAchievementResponseDto>(content, new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    });
+
+    // Correção do operador para retornar a lista de resultados com segurança
+    return resultado?.Results ?? new List<RawgAchievementDto>();
+}
     }
 }
