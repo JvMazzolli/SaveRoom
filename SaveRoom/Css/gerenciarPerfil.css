@@ -1,0 +1,349 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+
+    background: #0d1117;
+
+    color: #f0f6fc;
+
+    font-family: "Segoe UI", sans-serif;
+
+    min-height: 100vh;
+}
+
+/* =============================
+   TOPO TESTE
+============================= */
+
+.perfil-teste {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 20px;
+
+    background: #161b22;
+
+    border-bottom: 1px solid #30363d;
+}
+
+.perfil-teste label {
+
+    font-weight: 600;
+}
+
+.perfil-teste input {
+
+    width: 100px;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    border: 1px solid #30363d;
+
+    background: #21262d;
+
+    color: white;
+}
+
+.perfil-teste button {
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #238636;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.perfil-teste button:hover {
+
+    background: #2ea043;
+}
+
+/* =============================
+   PREVIEW PERFIL
+============================= */
+
+.preview {
+
+    position: relative;
+
+    height: 350px;
+
+    overflow: hidden;
+
+    margin-bottom: 40px;
+
+    border-bottom: 2px solid #30363d;
+}
+
+.banner {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.preview::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: linear-gradient(
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, .85)
+    );
+}
+
+.perfil-box {
+
+    position: absolute;
+
+    left: 40px;
+
+    bottom: 25px;
+
+    z-index: 2;
+}
+
+.avatar {
+
+    width: 160px;
+
+    height: 160px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 4px solid white;
+
+    background: #161b22;
+
+    box-shadow: 0 0 25px rgba(0,0,0,.4);
+}
+
+#nickname {
+
+    margin-top: 12px;
+
+    font-size: 1.8rem;
+
+    font-weight: bold;
+}
+
+/* =============================
+   ÁREAS
+============================= */
+
+section {
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding: 20px;
+}
+
+section h2 {
+
+    margin-bottom: 20px;
+
+    color: white;
+}
+
+/* =============================
+   AVATARES
+============================= */
+
+#avatar-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(120px, 1fr));
+
+    gap: 20px;
+}
+
+.avatar-card {
+
+    background: #161b22;
+
+    border: 2px solid transparent;
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+    transition: .2s;
+
+    cursor: pointer;
+}
+
+.avatar-card:hover {
+
+    border-color: #58a6ff;
+
+    transform: translateY(-2px);
+}
+
+.avatar-card.selected {
+
+    border-color: #3b82f6;
+
+    box-shadow: 0 0 15px rgba(59,130,246,.6);
+}
+
+.avatar-card img {
+
+    width: 100%;
+
+    aspect-ratio: 1;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
+
+/* =============================
+   BANNERS
+============================= */
+
+#banner-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(320px, 1fr));
+
+    gap: 20px;
+}
+
+.banner-card {
+
+    background: #161b22;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    border: 3px solid transparent;
+
+    transition: .2s;
+
+    cursor: pointer;
+}
+
+.banner-card:hover {
+
+    border-color: #58a6ff;
+
+    transform: scale(1.02);
+}
+
+.banner-card.selected {
+
+    border-color: #3b82f6;
+
+    box-shadow: 0 0 15px rgba(59,130,246,.6);
+}
+
+.banner-card img {
+
+    width: 100%;
+
+    height: 160px;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+/* =============================
+   BOTÃO SALVAR
+============================= */
+
+#btnSalvar {
+
+    display: block;
+
+    margin: 30px auto 70px;
+
+    padding: 16px 40px;
+
+    background: #2563eb;
+
+    border: none;
+
+    border-radius: 8px;
+
+    color: white;
+
+    font-weight: bold;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+#btnSalvar:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+/* =============================
+   MOBILE
+============================= */
+
+@media (max-width: 768px) {
+
+    .preview {
+
+        height: 260px;
+    }
+
+    .avatar {
+
+        width: 120px;
+
+        height: 120px;
+    }
+
+    #nickname {
+
+        font-size: 1.3rem;
+    }
+
+    #banner-list {
+
+        grid-template-columns: 1fr;
+    }
+}

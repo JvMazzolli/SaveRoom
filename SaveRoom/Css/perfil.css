@@ -1,0 +1,950 @@
+    :root {
+
+        --bg: #0d1117;
+
+        --card: #161b22;
+
+        --steam-blue: #66c0f4;
+
+        --steam-blue-dark: #417a9b;
+
+        --border: #30363d;
+
+        --text: #f0f6fc;
+
+        --secondary: #8b949e;
+    }
+
+    * {
+
+        margin: 0;
+
+        padding: 0;
+
+        box-sizing: border-box;
+    }
+
+    body {
+
+        background: var(--bg);
+
+        color: var(--text);
+
+        font-family: "Segoe UI", sans-serif;
+
+        min-height: 100vh;
+    }
+
+
+    .navbar {
+
+        height: 70px;
+
+        padding: 0 40px;
+
+        background: #171a21;
+
+        border-bottom: 1px solid #2f3540;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+    }
+
+    .logo {
+
+        font-size: 1.8rem;
+
+        font-weight: 800;
+
+        color: white;
+    }
+
+    .navbar ul {
+
+        display: flex;
+
+        gap: 25px;
+
+        list-style: none;
+    }
+
+    .navbar a {
+
+        color: #c7d5e0;
+
+        text-decoration: none;
+
+        transition: .2s;
+    }
+
+    .navbar a:hover {
+
+        color: white;
+    }
+
+
+    .banner {
+
+        position: relative;
+
+        height: 420px;
+
+        overflow: hidden;
+    }
+
+    .banner img {
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
+
+        display: block;
+
+        filter: brightness(.8);
+    }
+
+
+    .banner::after {
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        background:
+
+            linear-gradient(
+                to bottom,
+
+                rgba(0,0,0,.15),
+
+                rgba(0,0,0,.45),
+
+                rgba(13,17,23,.85),
+
+                #0d1117
+            );
+    }
+
+
+
+    /* --- CORREÇÃO DO ALINHAMENTO DO AVATAR E PERFIL --- */
+.profile {
+    position: relative;
+    max-width: 1300px;
+    margin: -90px auto 30px;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; /* Faz as colunas terem a mesma altura */
+    gap: 30px;
+    z-index: 10;
+}
+
+.profile-header-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    flex: 1;
+}
+
+.profile-main-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+    /* --- BARRA DE NÍVEL DA CONTA --- */
+    .account-level-container {
+        background: rgba(0, 0, 0, 0.25);
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin: 8px 0;
+        max-width: 450px;
+    }
+
+    .level-badge-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        color: #f0f6fc;
+        margin-bottom: 6px;
+    }
+
+    .level-xp-text {
+        color: #8b949e;
+        font-size: 0.75rem;
+    }
+
+    .level-bar-background {
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .level-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #66c0f4, #2ecc71);
+        border-radius: 3px;
+    }
+
+    /* --- QUADRADO LARANJA: BIO E LINKS --- */
+    .profile-bio-box {
+        background: rgba(13, 17, 23, 0.75);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 107, 0, 0.3); /* Tom alusivo à marcação laranja */
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 550px;
+    }
+
+    .profile-bio-box h3 {
+        font-size: 0.95rem;
+        color: #ff8533;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .profile-bio-box p {
+        font-size: 0.9rem;
+        color: #c7d5e0;
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+
+    .profile-links {
+        display: flex;
+        gap: 12px;
+    }
+
+    .profile-links a {
+        font-size: 0.8rem;
+        color: #66c0f4;
+        text-decoration: none;
+        background: rgba(102, 192, 244, 0.1);
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid rgba(102, 192, 244, 0.2);
+        transition: 0.2s;
+    }
+
+    .profile-links a:hover {
+        background: #66c0f4;
+        color: #0d1117;
+    }
+
+    /* --- QUADRADO À DIREITA: ESTATÍSTICAS DA CONTA --- */
+    .profile-stats-box {
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 25px;
+    width: 340px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribui os itens uniformemente de cima a baixo */
+    height: 100%; /* Força a ocupar toda a altura vertical disponível */
+}
+
+    .profile-stats-box h3 {
+        font-size: 1rem;
+        color: #fff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 8px;
+        margin-bottom: 4px;
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: #8b949e;
+    }
+
+    .stat-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #66c0f4;
+    }
+
+
+    .avatar img {
+
+        width: 180px;
+
+        height: 180px;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+
+        border: 5px solid var(--bg);
+
+        background: #111827;
+
+        box-shadow:
+
+            0 0 25px rgba(0,0,0,.6),
+
+            0 10px 30px rgba(0,0,0,.4);
+    }
+
+
+
+    .info {
+
+        display: flex;
+
+        flex-direction: column;
+
+        justify-content: flex-end;
+
+        padding-bottom: 15px;
+    }
+
+
+    #username {
+
+        font-size: 2.4rem;
+
+        font-weight: 800;
+
+        color: white;
+
+        margin-bottom: 10px;
+    }
+
+
+
+    .info p {
+
+        color: var(--secondary);
+
+        margin-top: 8px;
+
+        font-size: .95rem;
+    }
+
+
+
+    .trophies {
+
+        display: flex;
+
+        gap: 15px;
+
+        margin: 12px 0;
+    }
+
+    .trophies span {
+
+        font-size: 1.1rem;
+    }
+
+
+
+    #manage-profile {
+
+        margin-top: 20px;
+
+        width: fit-content;
+
+        padding: 12px 24px;
+
+        border-radius: 6px;
+
+        border: 1px solid #2f81f7;
+
+        background:
+
+            rgba(47,129,247,.15);
+
+        color: white;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition: .25s;
+    }
+
+    #manage-profile:hover {
+
+        background:
+
+            rgba(47,129,247,.3);
+
+        transform: translateY(-2px);
+    }
+
+    #manage-profile::before {
+
+        display: none;
+    }
+
+
+    .activities {
+
+        max-width: 1300px;
+
+        margin: 40px auto;
+
+        padding: 0 30px;
+    }
+
+
+
+    .activities h2 {
+
+        font-size: 2rem;
+
+        margin-bottom: 20px;
+    }
+
+
+
+    .game-card {
+
+        display: grid;
+
+        grid-template-columns: 260px 1fr;
+
+        background:
+
+            linear-gradient(
+                135deg,
+                #1b2838,
+                #16202d
+            );
+
+        border: 1px solid #2d4a63;
+
+        border-radius: 12px;
+
+        overflow: hidden;
+
+        box-shadow:
+
+            0 4px 12px rgba(0,0,0,.3);
+
+        transition: .25s;
+    }
+
+
+
+    .game-card:hover {
+
+        border-color: var(--steam-blue);
+
+        transform: translateY(-3px);
+    }
+
+
+
+    .game-image {
+
+        width: 100%;
+
+        height: 100%;
+
+        min-height: 260px;
+
+        object-fit: cover;
+    }
+
+    .profile {
+
+        position: relative;
+
+        max-width: 1300px;
+
+        margin: -80px auto 30px;
+
+        padding: 0 40px;
+
+        display: flex;
+
+        align-items: flex-end;
+
+        gap: 30px;
+
+        z-index: 10;
+    }
+
+
+    .info {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+        padding-bottom: 20px;
+    }
+
+
+    #username {
+
+        font-size: 2.6rem;
+
+        font-weight: 800;
+
+        color: white;
+    }
+
+
+    .profile-title {
+
+        color: #66c0f4;
+
+        font-weight: 600;
+
+        font-size: 1rem;
+    }
+
+
+    .profile-details {
+
+        display: flex;
+
+        gap: 20px;
+
+        color: #8b949e;
+    }
+
+
+
+    .dev-tools {
+
+        max-width: 1300px;
+
+        margin: 0 auto;
+
+        padding: 25px 40px;
+    }
+
+
+    .dev-tools h3 {
+
+        margin-bottom: 15px;
+
+        color: #8b949e;
+
+        font-size: .95rem;
+    }
+
+
+
+    .backlog-search {
+
+        display: flex;
+
+        gap: 12px;
+    }
+
+
+    .backlog-search input {
+
+        width: 220px;
+
+        padding: 12px;
+
+        border-radius: 6px;
+
+        border: 1px solid #30363d;
+
+        background: #161b22;
+
+        color: white;
+    }
+
+
+
+
+    .backlog-search button {
+
+        background: #1f6feb;
+
+        color: white;
+
+        border: none;
+
+        border-radius: 6px;
+
+        padding: 12px 20px;
+
+        cursor: pointer;
+
+        font-weight: 600;
+    }
+
+
+    .activities-header {
+
+        margin-bottom: 20px;
+
+        border-bottom: 1px solid #30363d;
+
+        padding-bottom: 10px;
+    }
+
+
+    /* Organização interna do conteúdo do card de jogo */
+    .game-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    /* Rodapé com os 4 blocos da atividade */
+    /* --- PADRONIZAÇÃO DO RODAPÉ DE ATIVIDADES --- */
+
+    .activity-footer {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 15px;
+        background: rgba(0, 0, 0, 0.25);
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    /* 1. Bloco de Plataforma (Padronizado em Azul/Cinza da Steam) */
+    .box-plataforma {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+        background: rgba(102, 192, 244, 0.1);
+        border: 1px solid rgba(102, 192, 244, 0.3);
+        border-radius: 6px;
+        color: #66c0f4;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    /* 2. Bloco de Conquistas (Removido o vermelho, agora em tons neutros/azulados) */
+    .box-conquistas {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .box-conquistas .label-conquistas {
+        color: #8b949e; /* Tom cinza padrão de legendas */
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.5px;
+    }
+    .box-conquistas .value-conquistas {
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    /* 3. Bloco do Meio (Barra de Progresso) */
+    .box-progress {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .progress-bar-container {
+        flex: 1;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #66c0f4, #2ecc71);
+        border-radius: 4px;
+        transition: width 0.4s ease;
+    }
+    .progress-percentage {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: #66c0f4;
+        min-width: 35px;
+        text-align: right;
+    }
+
+    /* 4. Bloco de Troféus */
+    .box-trofeus {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-left: 5px;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .trophy-badge {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+    }
+.trophy-badge.platinum {
+        background: linear-gradient(135deg, #e0e0e0, #888888);
+    box-shadow: 0 0 6px rgba(224, 224, 224, 0.3);
+}
+.trophy-badge.gold {
+    background: linear-gradient(135deg, #f1c40f, #e67e22);
+    box-shadow: 0 0 6px rgba(241, 196, 15, 0.3);
+}
+/* Status do Jogo em letras maiúsculas e padrão visual */
+.game-status {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #66c0f4;
+       letter-spacing: 0.5px;
+}
+    /* --- BOTÃO "VER MAIS" MODERNO --- */
+.see-more {
+    background: transparent;
+       border: none;
+    color: #66c0f4;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 0;
+    margin-top: 4px;
+    width: fit-content;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+.see-more:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(102, 192, 244, 0.6);
+    text-decoration: underline;
+}
+    /* --- ÁREA DE AÇÕES E BOTÃO "VER PÁGINA DO JOGO" --- */
+.game-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinha à direita no card */
+    margin-top: 12px;
+}
+.btn-game-page {
+    background: rgba(102, 192, 244, 0.15);
+    border: 1px solid rgba(102, 192, 244, 0.4);
+    color: #66c0f4;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-game-page:hover {        
+    background: #66c0f4;
+    color: #0d1117;
+    border-color: #66c0f4;
+    box-shadow: 0 0 12px rgba(102, 192, 244, 0.4);
+    transform: translateY(-2px);
+}
+    /* --- MODAL DE CONQUISTAS ESTILO STEAM --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.steam-modal-container {
+    background: #1b2838;
+    border: 1px solid #2d4a63;
+    width: 750px;
+    max-height: 85vh;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    color: #c7d5e0;
+    font-family: "Segoe UI", sans-serif;
+    overflow: hidden;
+}
+
+.steam-modal-header {
+    background: linear-gradient(135deg, #171a21, #1b2838);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #2a475e;
+}
+
+.game-title-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.game-title-row img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.game-title-row h2 {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.steam-close-btn {
+    background: #2a475e;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.steam-close-btn:hover {
+    background: #66c0f4;
+    color: #0d1117;
+}
+
+.steam-progress-section {
+    padding: 20px;
+    background: #16202d;
+}
+
+.steam-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.steam-progress-info span:last-child {
+    color: #8b949e;
+}
+
+.steam-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.steam-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1999ff, #66c0f4);
+    border-radius: 3px;
+}
+
+.steam-tabs {
+    display: flex;
+    background: #171a21;
+    padding: 0 20px;
+    border-bottom: 1px solid #2a475e;
+}
+
+.steam-tab {
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.steam-tab.active {
+    color: #fff;
+    border-bottom-color: #66c0f4;
+}
+
+.steam-achievements-list {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.steam-achievement-item {
+    background: #16202d;
+    border: 1px solid #2a475e;
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.steam-achievement-item img {
+    width: 55px;
+    height: 55px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.steam-achievement-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.steam-achievement-info h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.steam-achievement-info p {
+    color: #8b949e;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.steam-achievement-date {
+    font-size: 0.75rem;
+    color: #66c0f4;
+    text-align: right;
+}

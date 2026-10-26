@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAVEROOM - Perfil</title>
+  <link rel="stylesheet" href="..//Css/perfil.css">
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="logo">SAVEROOM</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Minha Coleção</a></li>
+        <li><a href="#">Catálogo</a></li>
+        <li><a href="#">Avaliações</a></li>
+        <li><a href="#">Perfil</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Conta</a></li>
+      </ul>
+    </nav>
+  </header>
+  <form id="add-game-form">
+    <label for="idPerfil">ID do Perfil:</label>
+    <input type="number" id="idPerfil" required>
+
+    <label for="nomeJogo">Nome do Jogo:</label>
+    <input type="text" id="nomeJogo" required>
+
+    <label for="status">Status:</label>
+    <select id="status" required>
+      <option value="JOGANDO">Jogando</option>
+      <option value="PLATINADO">Finalizado</option>
+      <option value="PARADO">Parado</option>
+    </select>
+
+    <button id="search-btn">Buscar</button>
+    <button id="submit">Adicionar</button>
+
+    <div id="response-message"></div>
+  </form>
+  <script src="../Js/adicionar_jogo_perfil.js"></script>
+</body>
+</html>
