@@ -19,8 +19,6 @@ namespace SaveRoom.Models.Dtos
         [Required]
         [MaxLength(100)]
         public string Nickname {  get; set; } = string.Empty;
-
-        public string? AvatarUrl { get; set; }
         public string? Bio {  get; set; }
     }
 }

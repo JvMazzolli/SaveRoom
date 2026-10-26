@@ -12,5 +12,6 @@ namespace SaveRoom.Models.Dtos
         [Required]
         public string Status { get; set; } = "a_jogar";
 
+        
     }
 }

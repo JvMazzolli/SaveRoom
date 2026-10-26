@@ -1,5 +1,6 @@
 using SaveRoom.Models;
 using Microsoft.EntityFrameworkCore;
+using SaveRoom.Models.Dtos;
 
 namespace SaveRoom.Data
 {
@@ -16,7 +17,9 @@ namespace SaveRoom.Data
         public DbSet<JogoGenero> JogosGeneros { get; set; }
         public DbSet<Backlog> Backlogs { get; set; }
         public DbSet<Analise> Analises { get; set; }
-
+        public DbSet<Avatar> Avatar {get; set;}
+        public DbSet<Banner> Banner {get; set;}
+        public DbSet<TituloPerfil> TituloPerfil {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

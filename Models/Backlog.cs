@@ -28,6 +28,12 @@ namespace SaveRoom.Models
         [Column("nome_jogo")]
         public string NomeJogo { get; set; } = string.Empty;
 
+        [Column("metacritic")]
+        public int? Metacritic {get; set; }
+
+        [Column("plataformas")]
+        public string? Plataformas {get; set;}
+        [Column]
         [ForeignKey(nameof(IdPerfil))]
         public Perfil? Perfil { get; set; }
 
