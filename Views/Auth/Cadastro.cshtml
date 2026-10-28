@@ -1,0 +1,156 @@
+
+@{
+    ViewData["Title"] = "Criar conta";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveRoom — Criar conta</title>
+    <link rel="stylesheet" href="~/css/auth.css" />
+</head>
+<body>
+    <main class="auth-container">
+        <section class="auth-card">
+            <a class="auth-logo" asp-controller="Home" asp-action="Index">
+                SaveRoom
+            </a>
+
+            <div class="auth-content">
+                <h1>Crie Sua Conta</h1>
+                <p class="auth-subtitle">
+                    Comece a catalogar e gerenciar seus jogos!
+                </p>
+
+                <form id="cadastroForm">
+                    <div class="form-group">
+                        <label for="nome" class="sr-only">Nome</label>
+                        <input
+                            type="text"
+                            id="nome"
+                            name="Nome"
+                            placeholder="Nome completo"
+                            maxlength="100"
+                            autocomplete="name"
+                            required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nickname" class="sr-only">Nickname</label>
+                        <input
+                            type="text"
+                            id="nickname"
+                            name="Nickname"
+                            placeholder="Nickname"
+                            maxlength="100"
+                            required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="sr-only">E-mail</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="Email"
+                            placeholder="E-mail"
+                            maxlength="150"
+                            autocomplete="email"
+                            required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha" class="sr-only">Senha</label>
+                        <input
+                            type="password"
+                            id="senha"
+                            name="Senha"
+                            placeholder="Senha (mínimo 6 caracteres)"
+                            minlength="6"
+                            autocomplete="new-password"
+                            required />
+                    </div>
+
+                    <p id="cadastroMensagem"
+                       role="status"
+                       aria-live="polite"></p>
+
+                    <button type="submit" class="auth-button" id="botaoCadastro">
+                        Criar
+                    </button>
+                </form>
+
+                <p class="auth-footer">
+                    Já tem uma conta?
+                    <a asp-controller="Auth" asp-action="Login">
+                        Entrar
+                    </a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const formulario = document.getElementById("cadastroForm");
+        const mensagem = document.getElementById("cadastroMensagem");
+        const botao = document.getElementById("botaoCadastro");
+
+        formulario.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            mensagem.textContent = "";
+            botao.disabled = true;
+            botao.textContent = "Criando conta...";
+
+            const dados = {
+                Nome: document.getElementById("nome").value.trim(),
+                Nickname: document.getElementById("nickname").value.trim(),
+                Email: document.getElementById("email").value.trim(),
+                Senha: document.getElementById("senha").value
+            };
+
+            try {
+                const resposta = await fetch("/api/Usuarios/registrar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                if (!resposta.ok) {
+                    const erro = await resposta.text();
+
+                    if (resposta.status === 409) {
+                        mensagem.textContent =
+                            "Este e-mail já está cadastrado.";
+                    } else if (resposta.status === 400) {
+                        mensagem.textContent =
+                            "Confira os dados preenchidos e tente novamente.";
+                    } else {
+                        mensagem.textContent =
+                            "Não foi possível criar a conta. Verifique se o servidor está funcionando.";
+                    }
+
+                    console.error("Erro no cadastro:", erro);
+                    return;
+                }
+
+                mensagem.textContent =
+                    "Conta criada com sucesso! Você já pode entrar.";
+                formulario.reset();
+
+            } catch (erro) {
+                mensagem.textContent =
+                    "Não foi possível conectar ao servidor. Verifique se a aplicação está rodando.";
+                console.error("Erro de conexão:", erro);
+            } finally {
+                botao.disabled = false;
+                botao.textContent = "Criar";
+            }
+        });
+    </script>
+</body>
+</html>

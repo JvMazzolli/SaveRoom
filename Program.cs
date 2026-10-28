@@ -3,10 +3,26 @@ using SaveRoom.Services.Interfaces;
 using SaveRoom.Data;
 using Microsoft.EntityFrameworkCore;
 using SaveRoom.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/Login";
+        options.Cookie.Name = "SaveRoom.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+        options.SlidingExpiration = true;
+    });
 
 builder.Services.AddHttpClient<IRawgApiService, RawgApiService1>();
 
@@ -55,6 +71,7 @@ app.UseRouting();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

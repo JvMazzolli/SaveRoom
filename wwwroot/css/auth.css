@@ -1,0 +1,179 @@
+:root {
+    --background: #101010;
+    --panel: #172020;
+    --input: #243536;
+    --yellow: #efb943;
+    --text: #e9e6dc;
+    --muted: #999991;
+    --border: #41413f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text);
+    font-family: "Archivo", sans-serif;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    min-height: 640px;
+    padding: 28px 32px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-logo {
+    color: var(--text);
+    font-family: "Zilla Slab", serif;
+    font-size: 30px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-content {
+    width: 100%;
+    max-width: 300px;
+    margin: 64px auto 0;
+}
+
+.auth-content h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 34px;
+    line-height: 0.98;
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    margin: 16px 0 28px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    display: block;
+    width: 100%;
+    height: 44px;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    background: var(--input);
+    color: var(--text);
+    font: inherit;
+    font-size: 17px;
+}
+
+.form-group input::placeholder {
+    color: #78807d;
+    font-weight: 600;
+}
+
+.form-group input:focus {
+    outline: 2px solid var(--yellow);
+    outline-offset: 1px;
+}
+
+.forgot-password {
+    margin-top: -13px;
+    margin-bottom: 30px;
+    text-align: right;
+}
+
+.forgot-password a {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.forgot-password a:hover,
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.auth-button {
+    width: 100%;
+    min-height: 42px;
+    border: none;
+    border-radius: 0;
+    background: var(--yellow);
+    color: #182426;
+    font-family: inherit;
+    font-size: 21px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.auth-button:hover {
+    filter: brightness(1.08);
+}
+
+.auth-footer {
+    margin-top: 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.auth-footer a {
+    color: var(--yellow);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 16px;
+    }
+
+    .auth-card {
+        min-height: 600px;
+        padding: 24px;
+    }
+
+    .auth-content {
+        margin-top: 58px;
+    }
+
+    .auth-content h1 {
+        font-size: 30px;
+    }
+}

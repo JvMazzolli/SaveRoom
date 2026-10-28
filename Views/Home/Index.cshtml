@@ -30,8 +30,19 @@
         <li><a href="#perfil">Perfil</a></li>
       </ul>
       <div class="nav-acoes">
-        <a class="botao botao-fantasma" href="#entrar">Entrar</a>
-        <a class="botao botao-cheio" href="#cadastro">Criar conta</a>
+          @if (User.Identity != null && User.Identity.IsAuthenticated)
+          {
+              <span class="botao botao-fantasma">@User.Identity.Name</span>
+
+              <form asp-controller="Auth" asp-action="Logout" method="post">
+                  <button type="submit" class="botao botao-cheio">Sair</button>
+              </form>
+          }
+          else
+          {
+              <a class="botao botao-fantasma" asp-controller="Auth" asp-action="Login">Entrar</a>
+              <a class="botao botao-cheio" asp-controller="Auth" asp-action="Cadastro">Criar conta</a>
+          }
       </div>
     </nav>
   </div>

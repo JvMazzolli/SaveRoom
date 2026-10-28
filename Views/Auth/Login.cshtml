@@ -1,0 +1,119 @@
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveRoom - Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true">
+</head>
+<body>
+    <main class="auth-container">
+        <section class="auth-card">
+            <a class="auth-logo" asp-controller="Home" asp-action="Index">
+                SaveRoom
+            </a>
+
+            <div class="auth-content">
+                <h1>Bem vindo de<br>volta!</h1>
+
+                <p class="auth-subtitle">
+                    faça login para gerenciar sua biblioteca
+                </p>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email" class="visually-hidden">E-mail</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="E-mail"
+                            autocomplete="email"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha" class="visually-hidden">Senha</label>
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            placeholder="Senha"
+                            autocomplete="current-password"
+                            required>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#" id="forgotPassword">Esqueceu a senha?</a>
+                    </div>
+
+                    <button type="submit" class="auth-button">
+                        Entrar
+                    </button>
+
+                    <p id="loginMensagem" role="status"></p>
+                </form>
+
+                <p class="auth-footer">
+                    Não tem uma conta?
+                    <a asp-controller="Auth" asp-action="Cadastro">Criar conta</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const mensagem = document.getElementById("loginMensagem");
+            const botao = this.querySelector('button[type="submit"]');
+
+            mensagem.textContent = "";
+            botao.disabled = true;
+
+            try {
+                const resposta = await fetch("/api/Usuarios/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("email").value,
+                        senha: document.getElementById("senha").value
+                    })
+                });
+
+                const dados = await resposta.json();
+
+                if (!resposta.ok) {
+                    mensagem.textContent =
+                        dados.mensagem || "E-mail ou senha inválidos.";
+                    return;
+                }
+
+                mensagem.textContent =
+                    dados.mensagem || "Login realizado com sucesso!";
+                    window.location.href = "/";
+
+            } catch (erro) {
+                mensagem.textContent =
+                    "Erro ao conectar com o servidor.";
+            } finally {
+                botao.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

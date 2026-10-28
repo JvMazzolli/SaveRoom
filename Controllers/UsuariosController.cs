@@ -3,6 +3,9 @@ using SaveRoom.Models;
 using SaveRoom.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 
 namespace SaveRoom.Controllers
@@ -119,6 +122,76 @@ namespace SaveRoom.Controllers
                     ? b.Jogo.Descricao
                     : null
                 })
+            });
+        }
+        
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUsuarioDto dto)
+        {
+            var email = dto.Email.Trim().ToLower();
+
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+
+            if (usuario == null)
+            {
+                return Unauthorized(new
+                {
+                    mensagem = "E-mail ou senha inválidos"
+                });
+            }
+
+            var senhaHash = Convert.ToBase64String(
+                System.Text.Encoding.UTF8.GetBytes(dto.Senha + usuario.Salt)
+            );
+
+            if (usuario.SenhaHash != senhaHash)
+            {
+                return Unauthorized(new
+                {
+                    mensagem = "E-mail ou senha inválidos"
+                });
+            }
+
+            var perfil = await _context.Perfis
+                .FirstOrDefaultAsync(p => p.IdUsuario == usuario.IdUsuario);
+
+            if (perfil == null)
+            {
+                return Unauthorized(new
+                {
+                    mensagem = "Perfil do usuário não encontrado"
+                });
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
+                new Claim(ClaimTypes.Name, perfil.Nickname),
+                new Claim(ClaimTypes.Email, usuario.Email)
+            };
+
+            var identidade = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            var principal = new ClaimsPrincipal(identidade);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal
+            );
+
+            return Ok(new
+            {
+                mensagem = "Login realizado com sucesso",
+                idUsuario = usuario.IdUsuario,
+                idPerfil = perfil.IdPerfil,
+                nome = usuario.Nome,
+                email = usuario.Email,
+                nickname = perfil.Nickname
             });
         }
     }
