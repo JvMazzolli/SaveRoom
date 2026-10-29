@@ -1,5 +1,4 @@
-const API_BASE_URL = "http://localhost:5209/api"; // ajuste para a porta/protocolo corretos
-
+const API_BASE_URL = "http://localhost:5209/api"; 
 document.addEventListener("DOMContentLoaded", () => {
   const addGameForm = document.getElementById("add-game-form");
 

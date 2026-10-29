@@ -1,0 +1,58 @@
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "SAVEROOM - Gerenciar Perfil";
+    Layout = null; 
+    // Pega o ID do usuário logado no Cookie
+    var usuarioIdLogado = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/gerenciarPerfil.css" asp-append-version="true">
+</head>
+<body>
+    // NAVBAR
+    <header class="navbar">
+        <h1 class="logo">SAVEROOM</h1>
+        <nav>
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Jogo" asp-action="Index">Catálogo</a></li>
+                <li><a asp-controller="Jogo" asp-action="MinhaColecao">Minha Coleção</a></li>
+                <li><a asp-controller="Avaliacao" asp-action="Index">Avaliações</a></li>
+                <li><a asp-controller="Usuario" asp-action="Perfil">Perfil</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="preview">
+        <img id="previewBanner" class="banner" alt="Banner do Perfil">
+        <div class="perfil-box">
+            <img id="previewAvatar" class="avatar" alt="Avatar do Perfil">
+            <h2 id="nickname">Meu Perfil</h2>
+        </div>
+    </section>
+
+    <section>
+        <h2>Escolha um Avatar</h2>
+        <div id="avatar-list"></div>
+    </section>
+
+    <section>
+        <h2>Escolha um Banner</h2>
+        <div id="banner-list"></div>
+    </section>
+
+    <button id="btnSalvar">Salvar Alterações</button>
+
+    // Injeta o ID logado automaticamente Js
+    <script>
+        const USUARIO_LOGADO_ID = "@usuarioIdLogado";
+    </script>
+    <script src="~/js/gerenciarPerfil.js" asp-append-version="true"></script>
+</body>
+</html>

@@ -27,7 +27,7 @@
         <li><a href="#colecao">Minha coleção</a></li>
         <li><a href="#catalogo">Catálogo</a></li>
         <li><a href="#avaliacoes">Avaliações</a></li>
-        <li><a href="#perfil">Perfil</a></li>
+        <li><a asp-controller="Usuario" asp-action="Perfil">Perfil</a></li>
       </ul>
       <div class="nav-acoes">
           @if (User.Identity != null && User.Identity.IsAuthenticated)

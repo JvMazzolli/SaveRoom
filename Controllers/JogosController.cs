@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using Saveroom.Services;
+using SaveRoom.Services;
 using System.Threading.Tasks;
 
-namespace Saveroom.Controllers
+namespace SaveRoom.Controllers
 {
     public class JogosController : Controller
     {
-        private readonly RawgApiService _rawgApi;
+        private readonly RawgApiService1 _rawgApi;
 
-        public JogosController(RawgApiService rawgApi)
+        public JogosController(RawgApiService1 rawgApi)
         {
             _rawgApi = rawgApi;
         }

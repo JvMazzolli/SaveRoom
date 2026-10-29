@@ -1,4 +1,4 @@
-namespace Saveroom.Models
+namespace SaveRoom.Models
 {
     public class JogoPerfil
     {

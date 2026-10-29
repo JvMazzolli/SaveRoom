@@ -1,4 +1,3 @@
-using Saveroom.Services;
 using SaveRoom.Services.Interfaces;
 using SaveRoom.Data;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +24,7 @@ builder.Services
     });
 
 builder.Services.AddHttpClient<IRawgApiService, RawgApiService1>();
+builder.Services.AddHttpClient<RawgApiService1>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -73,6 +73,13 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
+app.MapControllers();
 
 app.MapControllerRoute(
     name: "default",

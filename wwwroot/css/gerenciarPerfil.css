@@ -3,7 +3,215 @@
     padding: 0;
     box-sizing: border-box;
 }
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --steam-blue: #66c0f4;
+    --steam-blue-dark: #417a9b;
+    --border: #30363d;
+    --text: #f0f6fc;
+    --secondary: #8b949e;
+}
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", sans-serif;
+    min-height: 100vh;
+    padding-bottom: 50px;
+}
+
+/* --- NAVBAR PADRONIZADA --- */
+.navbar {
+    height: 70px;
+    padding: 0 40px;
+    background: #171a21;
+    border-bottom: 1px solid #2f3540;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+}
+
+.navbar ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+.navbar a {
+    color: #c7d5e0;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.navbar a:hover {
+    color: white;
+}
+
+/* --- SEÇÃO DE PREVIEW DO PERFIL --- */
+.preview {
+    position: relative;
+    max-width: 1300px;
+    margin: 40px auto 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #2d4a63;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    background: #1b2838;
+}
+
+.preview .banner {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.85);
+}
+
+.preview .perfil-box {
+    position: absolute;
+    bottom: 25px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    z-index: 5;
+}
+
+.preview .avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--bg);
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    background: #111827;
+}
+
+.preview h2#nickname {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+/* --- SEÇÕES DE ESCOLHA (AVATARES E BANNERS) --- */
+section:not(.preview) {
+    max-width: 1300px;
+    margin: 0 auto 30px;
+    padding: 0 40px;
+}
+
+section:not(.preview) h2 {
+    font-size: 1.2rem;
+    color: var(--secondary);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+}
+
+/* Grid de Avatares */
+#avatar-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.avatar-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.avatar-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-card:hover {
+    border-color: var(--steam-blue);
+    transform: scale(1.05);
+}
+
+.avatar-card.selected {
+    border-color: #2ecc71;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
+}
+
+/* Grid de Banners */
+#banner-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.banner-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    height: 130px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.banner-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-card:hover {
+    border-color: var(--steam-blue);
+    transform: translateY(-2px);
+}
+
+.banner-card.selected {
+    border-color: #2ecc71;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
+}
+
+/* --- BOTÃO SALVAR --- */
+#btnSalvar {
+    display: block;
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 14px 30px;
+    background: #1f6feb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#btnSalvar:hover {
+    background: #388bfd;
+    box-shadow: 0 0 15px rgba(31, 111, 235, 0.4);
+    transform: translateY(-2px);
+}
 body {
 
     background: #0d1117;
