@@ -66,8 +66,22 @@
         <!-- Imagem e Alt dinâmicos -->
         <img src="@Model.Background_Image" alt="Capa do jogo @Model.Name" class="jogo-poster-img">
         <div class="jogo-acoes">
-          <button class="botao botao-cheio botao-grande">Adicionar à Coleção</button>
+          @if (User.Identity != null && User.Identity.IsAuthenticated)
+          {
+            <!-- Armazenar dados necessários para o JavaScript -->
+            <input type="hidden" id="hdnIdPerfil" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
+            <input type="hidden" id="hdnNomeJogo" value="@Model.Name" />
+
+            <button type="button" id="btnAdicionarColecao" class="botao botao-cheio botao-grande">Adicionar à Coleção</button>
+          }
+          else
+          {   
+            <a asp-controller="Auth" asp-action="Login" class="botao botao-cheio botao-grande" style="text-align: center;">Faça login para adicionar</a>
+          }
         </div>
+
+        <!-- Div para mensagens de feedback -->
+        <div id="mensagemFeedback" style="margin-top: 10px; display: none;"></div>
       </div>
 
       <div class="jogo-bloco">
@@ -107,13 +121,22 @@
         <h1>@Model.Name</h1>
       </div>
 
-      <div class="jogo-midia-destaque">
+     <div class="jogo-midia-destaque">
+        <!-- Imagem secundaria do jogo -->
         <div class="jogo-midia-placeholder">
-          <!-- Reutilizando a imagem de fundo ou você pode mapear screenshots depois -->
-          <img src="@Model.Background_Image" alt="Screenshot do jogo @Model.Name">
-          <span class="jogo-badge-visual">Conteúdo Visual</span>
-        </div>
-      </div>
+    
+          @if (!string.IsNullOrEmpty(Model.Background_Image_Additional))
+          {
+            <img src="@Model.Background_Image_Additional" alt="Gameplay ou arte conceitual de @Model.Name">
+          }
+          else
+          {
+            <img src="@Model.Background_Image" alt="Screenshot do jogo @Model.Name">
+          }
+    
+    <span class="jogo-badge-visual">Midia do jogo</span>
+  </div>
+</div>
 
       <div class="jogo-grade-inferior">
 
@@ -123,7 +146,6 @@
     
             @if(Model.PostsDaComunidade != null && Model.PostsDaComunidade.Any())
             {
-                // Pegamos apenas os 3 primeiros posts para não quebrar o layout
                 @foreach (var post in Model.PostsDaComunidade.Take(3)) 
                 {
                     <div class="avaliacao-simples">
@@ -131,7 +153,7 @@
                         <span class="avaliacao-autor" style="color: var(--ambar);">@post.Username</span>
                         <a href="@post.Url" target="_blank" class="nota" style="font-size: 0.75rem; text-decoration: none;">Ver Post</a>
                     </div>
-                    <!-- Usamos o título do post como texto da avaliação -->
+                    <!-- Título do post como texto da avaliação -->
                     <p>@post.Name</p>
                     </div>
                     <hr class="jogo-linha-divisoria">
@@ -190,5 +212,72 @@
   </div>
 </footer>
 <script src="~/js/script.js"></script>
+
+<!-- Adicionar Jogo ao perfil -->
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnAdicionar = document.getElementById('btnAdicionarColecao');
+            const mensagemFeedback = document.getElementById('mensagemFeedback');
+
+            if (btnAdicionar) {
+                btnAdicionar.addEventListener('click', async function () {
+                    // 1. Coletar os dados
+                    const idPerfilStr = document.getElementById('hdnIdPerfil').value;
+                    const nomeJogo = document.getElementById('hdnNomeJogo').value;
+                    
+                    // Validação simples
+                    if (!idPerfilStr || !nomeJogo) {
+                        mostrarMensagem("Erro: Informações incompletas para adicionar ao backlog.", "vermelho");
+                        return;
+                    }
+
+                    const idPerfil = parseInt(idPerfilStr, 10);
+
+                    // 2. Montar o DTO
+                    const dto = {
+                        idPerfil: idPerfil,
+                        nomeJogo: nomeJogo,
+                        status: "a_jogar" // Status padrão definido no DTO
+                    };
+
+                    try {
+                        // 3. Fazer a requisição POST para a API
+                        const resposta = await fetch('/api/Backlog/adicionar', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(dto)
+                        });
+
+                        const dados = await resposta.json();
+
+                        // 4. Lidar com a resposta
+                        if (resposta.ok) {
+                            mostrarMensagem(dados.mensagem || "Jogo adicionado com sucesso!", "verde");
+                            btnAdicionar.innerText = "Na Coleção";
+                            btnAdicionar.disabled = true;
+                        } else {
+                            mostrarMensagem(dados.mensagem || "Erro ao adicionar o jogo.", "vermelho");
+                        }
+                    } catch (erro) {
+                        console.error("Erro na requisição:", erro);
+                        mostrarMensagem("Erro de comunicação com o servidor.", "vermelho");
+                    }
+                });
+            }
+
+            // Função auxiliar para exibir feedback ao usuário
+            function mostrarMensagem(texto, cor) {
+                mensagemFeedback.innerText = texto;
+                mensagemFeedback.style.color = cor === "verde" ? "green" : "red";
+                mensagemFeedback.style.display = "block";
+            }
+        });
+    </script>
+}
+
 </body>
 </html>

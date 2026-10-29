@@ -6,6 +6,7 @@ namespace SaveRoom.Models
         public string Name { get; set; }
         public string Description_Raw { get; set; }
         public string Background_Image { get; set; }
+        public string Background_Image_Additional { get; set; }
         public string Released { get; set; }
         public double Rating { get; set; }
         public List<RedditPost> PostsDaComunidade { get; set; } = new List<RedditPost>();
