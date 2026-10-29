@@ -91,10 +91,23 @@
       <p class="secao-apoio">Busque um título e defina em que ponto da sua biblioteca ele entra.</p>
     </div>
     <div class="controles" id="catalogo">
-      <div class="busca">
+
+      <!-- ----------------------------------------- Busca de jogo ------------------------------------------- -->
+
+      <form asp-controller="Jogos" asp-action="Buscar" method="get" class="busca">
         <label for="campoBusca">Buscar jogo</label>
-        <input type="search" id="campoBusca" placeholder="Digite o nome de um jogo" autocomplete="off">
-      </div>
+        <input type="search" name="nomeJogo" id="campoBusca" placeholder="Digite o nome de um jogo, ex: Skyrim" autocomplete="off" required>
+        <button type="submit" hidden>Buscar</button> <!-- Botão oculto para permitir envio com a tecla Enter -->
+      </form>
+
+      <!-- Mensagem de erro caso o jogo não seja encontrado -->
+      @if (TempData["ErroBusca"] != null)
+      {
+        <p class="vazio" style="color: red; display: block; margin-top: 10px;">@TempData["ErroBusca"]</p>
+      }
+
+      <!-- ----------------------------------------- Busca de jogo ------------------------------------------- -->
+
       <div class="abas" role="tablist" aria-label="Filtrar por status">
         <button class="aba aba-ativa" role="tab" aria-selected="true" data-status="todos">Todos</button>
         <button class="aba" role="tab" aria-selected="false" data-status="jogando">Jogando</button>
