@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="~/css/perfil.css" asp-append-version="true">
 </head>
 <body>
-    // NAVB
+    <!-- NAVB -->
     <header class="navbar">
         <h1 class="logo">SAVEROOM</h1>
         <nav>
@@ -32,20 +32,20 @@
         <img id="banner-img" src="" alt="Banner do Perfil">
     </section>
 
-    //PERFIL    
+    <!-- PERFIL -->    
     <section class="profile">
-        // COLUNA PRINCIPAL (AVATAR + DADOS DO PERIL)
+        <!-- COLUNA PRINCIPAL (AVATAR + DADOS DO PERIL) -->
         <div class="profile-header-wrapper">
             <div class="avatar">
                 <img id="avatar" src="" alt="Avatar do usuário">
             </div>
             <div class="profile-main-col">
-                // INFORMAÇÕES BÁSICAS DO USUÁRIO
+                <!-- INFORMAÇÕES BÁSICAS DO USUÁRIO -->
                 <div class="info">
                     <h1 id="username">Usuário</h1>
                     <span id="titulo-perfil" class="profile-title">Velha Guarda</span>
                     
-                    // BARRA DE NÍVEL DA CONTA (ainda devo alterar para ficar dinamico)
+                    <!-- BARRA DE NÍVEL DA CONTA (ainda devo alterar para ficar dinamico) -->
                     <div class="account-level-container">
                         <div class="level-badge-header">
                             <span>Nível <strong id="level">1</strong></span>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                // BIO, DESCRIÇÕES E LINKS (tambem sera evoluido)
+                <!-- BIO, DESCRIÇÕES E LINKS (tambem sera evoluido) -->
                 <div class="profile-bio-box">
                     <h3>Sobre mim</h3>
                     <p id="user-bio">Carregando biografia...</p>
@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        // Parte de Estatisticas (vou alterar tambem)
+        <!-- Parte de Estatisticas (vou alterar tambem) -->
         <div class="profile-stats-box">
             <h3>Estatísticas da Conta</h3>
             <div class="stat-item">
@@ -95,7 +95,7 @@
         </div>
     </section>
 
-    // TESTE POR ID (JÁ PODE SER EXCLUIDO)
+    <!-- TESTE POR ID (JÁ PODE SER EXCLUIDO) -->
     <section class="dev-tools">
         <h3>Buscar Perfil (Modo Teste)</h3>
         <div class="backlog-search">
@@ -104,7 +104,7 @@
         </div>
     </section>
 
-    // BACKLOG
+    <!--- BACKLOG -->
     <section class="activities">
         <div class="activities-header">
             <h2>Atividades Recentes</h2>
@@ -112,7 +112,7 @@
         <div id="activity-list" class="activity-list"></div>
     </section>
 
-    // MODAL DE CONQUISTAS
+    <!-- MODAL DE CONQUISTAS -->
     <div id="modal-conquistas" class="modal-overlay" style="display: none;">
         <div class="steam-modal-container">
             <div class="steam-modal-header">
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    // Passa o ID do usuário logado do C# para o JavaScript
+    <!-- Passa o ID do usuário logado do C# para o JavaScript -->
     <script>
         const USUARIO_LOGADO_ID = "@usuarioIdLogado";
     </script>
