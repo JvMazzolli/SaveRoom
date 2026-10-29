@@ -25,7 +25,7 @@
 
 <header class="topo">
   <div class="faixa">
-    <a class="marca" href="~/index.html" aria-label="Saveroom, página inicial">
+    <a class="marca" asp-controller="Home" asp-action="Index" aria-label="Saveroom, página inicial">
       <span class="marca-icone" aria-hidden="true"></span>
       <span class="marca-nome">Saveroom</span>
     </a>
@@ -35,14 +35,24 @@
     </button>
     <nav class="navegacao" id="navegacao">
       <ul class="nav-lista">
-        <li><a href="~/index.html#colecao">Minha coleção</a></li>
-        <li><a href="~/index.html#catalogo">Catálogo</a></li>
-        <li><a href="~/index.html#avaliacoes">Avaliações</a></li>
-        <li><a href="~/index.html#perfil">Perfil</a></li>
+        <li><a href="/#colecao">Minha coleção</a></li>
+        <li><a href="/#catalogo">Catálogo</a></li>
+        <li><a href="/#avaliacoes">Avaliações</a></li>
+        <li><a asp-controller="Usuario" asp-action="Perfil">Perfil</a></li>
       </ul>
       <div class="nav-acoes">
-        <a class="botao botao-fantasma" href="#entrar">Entrar</a>
-        <a class="botao botao-cheio" href="#cadastro">Criar conta</a>
+          @if (User.Identity != null && User.Identity.IsAuthenticated)
+          {
+            <span class="botao botao-fantasma">@User.Identity.Name</span>
+            <form asp-controller="Auth" asp-action="Logout" method="post">
+                <button type="submit" class="botao botao-cheio">Sair</button>
+            </form>
+          }
+          else
+          {
+            <a class="botao botao-fantasma" asp-controller="Auth" asp-action="Login">Entrar</a>
+            <a class="botao botao-cheio" asp-controller="Auth" asp-action="Cadastro">Criar conta</a>
+          }
       </div>
     </nav>
   </div>
@@ -159,7 +169,6 @@
           <div style="text-align: center; margin-top: 16px;">
             <p style="font-size: 2.5rem; color: var(--ambar); font-family: var(--fonte-titulo); font-weight: 700;">@Model.Rating</p>
             <p class="jogo-texto" style="font-size: 0.85rem; margin-bottom: 16px;">nota geral no RAWG</p>
-            <a href="#" class="botao botao-contorno" style="width: 100%; text-align: center;">Ver detalhes</a>
           </div>
         </div>
 
@@ -174,9 +183,9 @@
     <p class="rodape-marca">Saveroom</p>
     <p class="rodape-info">Projeto acadêmico. Informações de jogos obtidas pela API RAWG.</p>
     <ul class="rodape-links">
-      <li><a href="~/index.html#catalogo">Catálogo</a></li>
-      <li><a href="~/index.html#avaliacoes">Avaliações</a></li>
-      <li><a href="~/index.html#perfil">Perfil</a></li>
+      <li><a href="/#catalogo">Catálogo</a></li>
+      <li><a href="/#avaliacoes">Avaliações</a></li>
+      <li><a asp-controller="Usuario" asp-action="Perfil">Perfil</a></li>
     </ul>
   </div>
 </footer>
