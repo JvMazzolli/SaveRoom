@@ -1,16 +1,12 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 :root {
-    --bg: #0d1117;
-    --card: #161b22;
+    --steam-bg-dark: #0f1015;
+    --steam-bg-main: #171a21;
+    --steam-content-bg: #1b1e26;
+    --steam-sidebar-bg: #171a21;
     --steam-blue: #66c0f4;
-    --steam-blue-dark: #417a9b;
-    --border: #30363d;
-    --text: #f0f6fc;
-    --secondary: #8b949e;
+    --steam-border-color: #2a2b38;
+    --steam-text-muted: #8f98a0;
+    --steam-text-light: #f3f3f3;
 }
 
 * {
@@ -19,17 +15,17 @@
     box-sizing: border-box;
 }
 
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Segoe UI", sans-serif;
+body.steam-edit-body {
+    background-color: var(--steam-bg-dark);
+    color: var(--steam-text-light);
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     min-height: 100vh;
-    padding-bottom: 50px;
+    padding-bottom: 60px;
 }
 
-/* --- NAVBAR PADRONIZADA --- */
+/* NAVBAR */
 .navbar {
-    height: 70px;
+    height: 65px;
     padding: 0 40px;
     background: #171a21;
     border-bottom: 1px solid #2f3540;
@@ -39,9 +35,10 @@ body {
 }
 
 .logo {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: white;
+    letter-spacing: 2px;
 }
 
 .navbar ul {
@@ -53,505 +50,565 @@ body {
 .navbar a {
     color: #c7d5e0;
     text-decoration: none;
-    transition: .2s;
+    font-size: 0.95rem;
+    transition: color 0.2s;
 }
 
 .navbar a:hover {
-    color: white;
+    color: var(--steam-blue);
 }
 
-/* --- SEÇÃO DE PREVIEW DO PERFIL --- */
-.preview {
-    position: relative;
-    max-width: 1300px;
-    margin: 40px auto 30px;
-    border-radius: 12px;
+/* CONTAINER PRINCIPAL */
+.steam-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: var(--steam-bg-main);
+    border-radius: 4px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
     overflow: hidden;
-    border: 1px solid #2d4a63;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    background: #1b2838;
+    border: 1px solid var(--steam-border-color);
 }
 
-.preview .banner {
-    width: 100%;
-    height: 350px;
-    object-fit: cover;
-    display: block;
-    filter: brightness(0.85);
+/* HEADER SUPERIOR DO PERFIL */
+.steam-profile-header {
+    background: linear-gradient(90deg, #1f232d 0%, #13151b 100%);
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--steam-border-color);
 }
 
-.preview .perfil-box {
-    position: absolute;
-    bottom: 25px;
-    left: 40px;
+.steam-header-info {
     display: flex;
     align-items: center;
-    gap: 25px;
-    z-index: 5;
+    gap: 16px;
 }
 
-.preview .avatar {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
+.steam-avatar-thumb {
+    width: 48px;
+    height: 48px;
+    background: #000;
+    border-radius: 2px;
+    padding: 2px;
+    border: 1px solid #3c4456;
+}
+
+.steam-avatar-thumb img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border: 4px solid var(--bg);
-    box-shadow: 0 0 20px rgba(0,0,0,0.7);
-    background: #111827;
 }
 
-.preview h2#nickname {
-    font-size: 2.4rem;
-    font-weight: 800;
+.steam-header-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.steam-username {
+    font-size: 1.4rem;
+    font-weight: 600;
     color: white;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
-/* --- SEÇÕES DE ESCOLHA (AVATARES E BANNERS) --- */
-section:not(.preview) {
-    max-width: 1300px;
-    margin: 0 auto 30px;
-    padding: 0 40px;
+.steam-breadcrumb {
+    color: var(--steam-text-muted);
+    font-size: 0.9rem;
 }
 
-section:not(.preview) h2 {
-    font-size: 1.2rem;
-    color: var(--secondary);
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
-}
-
-/* Grid de Avatares */
-#avatar-list {
+/* LAYOUT GRID DE 2 COLUNAS */
+.steam-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 15px;
+    grid-template-columns: 240px 1fr;
+    min-height: 550px;
 }
 
-.avatar-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s ease;
+/* SIDEBAR DA STEAM */
+.steam-sidebar {
+    background-color: var(--steam-sidebar-bg);
+    border-right: 1px solid var(--steam-border-color);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
 }
 
-.avatar-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.avatar-card:hover {
-    border-color: var(--steam-blue);
-    transform: scale(1.05);
-}
-
-.avatar-card.selected {
-    border-color: #2ecc71;
-    box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
-}
-
-/* Grid de Banners */
-#banner-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 15px;
-}
-
-.banner-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    height: 130px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.banner-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.banner-card:hover {
-    border-color: var(--steam-blue);
-    transform: translateY(-2px);
-}
-
-.banner-card.selected {
-    border-color: #2ecc71;
-    box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
-}
-
-/* --- BOTÃO SALVAR --- */
-#btnSalvar {
+.steam-back-link {
+    color: var(--steam-text-muted);
+    font-size: 0.85rem;
+    text-decoration: underline;
+    padding: 0 20px 15px 20px;
     display: block;
-    max-width: 1300px;
-    margin: 40px auto;
-    padding: 14px 30px;
-    background: #1f6feb;
+    transition: color 0.2s;
+}
+
+.steam-back-link:hover {
     color: white;
+}
+
+.steam-nav-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.steam-nav-item {
+    background: transparent;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 700;
+    text-align: left;
+    color: var(--steam-text-muted);
+    padding: 10px 20px;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: 0.25s;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    width: 100%;
 }
 
-#btnSalvar:hover {
-    background: #388bfd;
-    box-shadow: 0 0 15px rgba(31, 111, 235, 0.4);
-    transform: translateY(-2px);
-}
-body {
-
-    background: #0d1117;
-
-    color: #f0f6fc;
-
-    font-family: "Segoe UI", sans-serif;
-
-    min-height: 100vh;
+.steam-nav-item:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.03);
 }
 
-/* =============================
-   TOPO TESTE
-============================= */
-
-.perfil-teste {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 20px;
-
-    background: #161b22;
-
-    border-bottom: 1px solid #30363d;
-}
-
-.perfil-teste label {
-
+.steam-nav-item.active {
+    color: white;
+    background: #272c38;
+    border-left-color: var(--steam-blue);
     font-weight: 600;
 }
 
-.perfil-teste input {
+.steam-nav-divider {
+    height: 1px;
+    background: var(--steam-border-color);
+    margin: 15px 20px;
+}
 
-    width: 100px;
+.steam-points-wrapper {
+    margin-top: auto;
+    padding: 0 20px;
+}
 
-    padding: 10px;
+.steam-points-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--steam-blue);
+    color: var(--steam-blue);
+    padding: 8px 12px;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
 
-    border-radius: 6px;
+.steam-points-btn:hover {
+    background: rgba(102, 192, 244, 0.15);
+}
 
+/* ÁREA DE CONTEÚDO */
+.steam-content {
+    background-color: var(--steam-content-bg);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* OCULTAÇÃO RIGOROSA DE ABAS INATIVAS */
+.tab-pane {
+    display: none !important;
+}
+
+.tab-pane.active {
+    display: block !important;
+}
+
+.steam-section-title {
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.steam-section-sub {
+    font-size: 0.85rem;
+    color: var(--steam-text-muted);
+    margin-bottom: 25px;
+}
+
+/* INPUTS DA ABA GERAL */
+.steam-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 400px;
+}
+
+.steam-form-group label {
+    font-size: 0.88rem;
+    color: var(--steam-text-muted);
+}
+
+.steam-input {
+    background: #101217;
     border: 1px solid #30363d;
-
-    background: #21262d;
-
+    border-radius: 2px;
+    padding: 10px 12px;
     color: white;
+    font-size: 0.95rem;
+    outline: none;
 }
 
-.perfil-teste button {
-
-    padding: 10px 16px;
-
-    border: none;
-
-    border-radius: 6px;
-
-    background: #238636;
-
-    color: white;
-
-    cursor: pointer;
-
-    font-weight: 600;
+.steam-input:focus {
+    border-color: var(--steam-blue);
 }
 
-.perfil-teste button:hover {
-
-    background: #2ea043;
+/* PREVIEW DO AVATAR DA ABA AVATAR */
+.steam-preview-block {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    background: #14161c;
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #232733;
+    margin-bottom: 30px;
 }
 
-/* =============================
-   PREVIEW PERFIL
-============================= */
-
-.preview {
-
-    position: relative;
-
-    height: 350px;
-
-    overflow: hidden;
-
-    margin-bottom: 40px;
-
-    border-bottom: 2px solid #30363d;
+.steam-previews-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
 }
 
-.banner {
+.steam-preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
 
+.avatar-frame {
+    background: #000;
+    padding: 2px;
+    border: 1px solid #313846;
+}
+
+.preview-184 .avatar-frame { width: 110px; height: 110px; }
+.preview-64 .avatar-frame { width: 56px; height: 56px; }
+.preview-32 .avatar-frame { width: 32px; height: 32px; }
+
+.previewAvatar {
     width: 100%;
-
     height: 100%;
-
     object-fit: cover;
-
     display: block;
 }
 
-.preview::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background: linear-gradient(
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, .85)
-    );
+.size-label {
+    font-size: 0.75rem;
+    color: var(--steam-text-muted);
 }
 
-.perfil-box {
-
-    position: absolute;
-
-    left: 40px;
-
-    bottom: 25px;
-
-    z-index: 2;
+.steam-upload-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 10px;
 }
 
-.avatar {
-
-    width: 160px;
-
-    height: 160px;
-
-    border-radius: 50%;
-
-    object-fit: cover;
-
-    border: 4px solid white;
-
-    background: #161b22;
-
-    box-shadow: 0 0 25px rgba(0,0,0,.4);
-}
-
-#nickname {
-
-    margin-top: 12px;
-
-    font-size: 1.8rem;
-
-    font-weight: bold;
-}
-
-/* =============================
-   ÁREAS
-============================= */
-
-section {
-
-    max-width: 1400px;
-
-    margin: 0 auto;
-
-    padding: 20px;
-}
-
-section h2 {
-
-    margin-bottom: 20px;
-
+.steam-upload-btn {
+    background: #3d4450;
     color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 2px;
+    font-size: 0.82rem;
+    cursor: pointer;
 }
 
-/* =============================
-   AVATARES
-============================= */
+.steam-upload-box p {
+    font-size: 0.78rem;
+    color: var(--steam-text-muted);
+    max-width: 220px;
+    line-height: 1.3;
+}
 
-#avatar-list {
+/* GRIDS DE AVATARES E BANNERS */
+.steam-gallery-section {
+    margin-bottom: 20px;
+}
 
+.steam-gallery-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.steam-avatar-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fill, minmax(120px, 1fr));
-
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 12px;
 }
 
 .avatar-card {
-
-    background: #161b22;
-
-    border: 2px solid transparent;
-
-    border-radius: 12px;
-
-    padding: 10px;
-
-    transition: .2s;
-
+    position: relative;
+    aspect-ratio: 1;
+    background: #000;
+    border: 2px solid #282e3c;
+    border-radius: 3px;
     cursor: pointer;
-}
-
-.avatar-card:hover {
-
-    border-color: #58a6ff;
-
-    transform: translateY(-2px);
-}
-
-.avatar-card.selected {
-
-    border-color: #3b82f6;
-
-    box-shadow: 0 0 15px rgba(59,130,246,.6);
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.15s;
 }
 
 .avatar-card img {
-
     width: 100%;
-
-    aspect-ratio: 1;
-
+    height: 100%;
     object-fit: cover;
-
-    border-radius: 50%;
 }
 
-/* =============================
-   BANNERS
-============================= */
+.avatar-card:hover {
+    border-color: var(--steam-blue);
+    transform: scale(1.03);
+}
 
-#banner-list {
+.avatar-card.selected {
+    border-color: var(--steam-blue);
+    box-shadow: 0 0 10px rgba(102, 192, 244, 0.7);
+}
 
+.steam-banner-preview-box {
+    width: 100%;
+    height: 120px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid var(--steam-border-color);
+    background: #000;
+}
+
+.banner-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.steam-banner-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fill, minmax(320px, 1fr));
-
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
 }
 
 .banner-card {
-
-    background: #161b22;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    border: 3px solid transparent;
-
-    transition: .2s;
-
+    height: 80px;
+    background: #000;
+    border: 2px solid #282e3c;
+    border-radius: 3px;
     cursor: pointer;
-}
-
-.banner-card:hover {
-
-    border-color: #58a6ff;
-
-    transform: scale(1.02);
-}
-
-.banner-card.selected {
-
-    border-color: #3b82f6;
-
-    box-shadow: 0 0 15px rgba(59,130,246,.6);
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.15s;
 }
 
 .banner-card img {
-
     width: 100%;
-
-    height: 160px;
-
+    height: 100%;
     object-fit: cover;
-
-    display: block;
 }
 
-/* =============================
-   BOTÃO SALVAR
-============================= */
-
-#btnSalvar {
-
-    display: block;
-
-    margin: 30px auto 70px;
-
-    padding: 16px 40px;
-
-    background: #2563eb;
-
-    border: none;
-
-    border-radius: 8px;
-
-    color: white;
-
-    font-weight: bold;
-
-    font-size: 1rem;
-
-    cursor: pointer;
-
-    transition: .2s;
-}
-
-#btnSalvar:hover {
-
-    background: #1d4ed8;
-
+.banner-card:hover {
+    border-color: var(--steam-blue);
     transform: translateY(-1px);
 }
 
-/* =============================
-   MOBILE
-============================= */
+.banner-card.selected {
+    border-color: var(--steam-blue);
+    box-shadow: 0 0 10px rgba(102, 192, 244, 0.7);
+}
 
-@media (max-width: 768px) {
+/* BOTÃO SALVAR */
+.steam-actions-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid var(--steam-border-color);
+    margin-top: 25px;
+}
 
-    .preview {
+.steam-save-btn {
+    background: linear-gradient(90deg, #47bfff 0%, #1a9fff 100%);
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(26, 159, 255, 0.4);
+    transition: all 0.2s;
+}
 
-        height: 260px;
-    }
+.steam-save-btn:hover {
+    background: linear-gradient(90deg, #66c0f4 0%, #33aaff 100%);
+    box-shadow: 0 0 12px rgba(102, 192, 244, 0.7);
+}
 
-    .avatar {
+/* TOAST DE NOTIFICAÇÃO FLUTUANTE (STEAM STYLE) */
+.steam-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #171a21;
+    border: 1px solid #66c0f4;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 12px rgba(102, 192, 244, 0.3);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        width: 120px;
+.steam-toast.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
 
-        height: 120px;
-    }
+.steam-toast.error {
+    border-color: #ff4d4d;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 12px rgba(255, 77, 77, 0.3);
+}
 
-    #nickname {
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
 
-        font-size: 1.3rem;
-    }
+.toast-icon {
+    width: 22px;
+    height: 22px;
+    background: rgba(102, 192, 244, 0.2);
+    color: #66c0f4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
 
-    #banner-list {
+.steam-toast.error .toast-icon {
+    background: rgba(255, 77, 77, 0.2);
+    color: #ff4d4d;
+}
 
-        grid-template-columns: 1fr;
-    }
+.toast-progress {
+    height: 3px;
+    background: #66c0f4;
+    width: 0%;
+    transition: width 3s linear;
+}
+
+.steam-toast.error .toast-progress {
+    background: #ff4d4d;
+}
+
+.steam-textarea {
+    resize: vertical;
+    min-height: 90px;
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+/* CAIXA DE PREVIEW DA INSÍGNIA EM DESTAQUE */
+.steam-featured-badge-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #14161c;
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #232733;
+    margin-bottom: 30px;
+}
+
+.featured-badge-preview {
+    width: 70px;
+    height: 70px;
+    background: #000;
+    border: 2px solid var(--steam-blue);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.featured-badge-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.featured-badge-info h3 {
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.featured-badge-info p {
+    font-size: 0.85rem;
+    color: var(--steam-text-muted);
+}
+
+/* GRADE DE INSÍGNIAS */
+.steam-insignia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 12px;
+}
+
+.insignia-card {
+    position: relative;
+    aspect-ratio: 1;
+    background: #12141a;
+    border: 2px solid #282e3c;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.insignia-card img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.insignia-card.locked {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.insignia-card:not(.locked):hover {
+    border-color: var(--steam-blue);
+    transform: scale(1.03);
+}
+
+.insignia-card.selected {
+    border-color: var(--steam-blue);
+    box-shadow: 0 0 12px rgba(102, 192, 244, 0.7);
+    background: rgba(102, 192, 244, 0.05);
 }

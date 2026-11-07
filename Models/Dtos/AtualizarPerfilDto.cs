@@ -8,5 +8,7 @@ public class AtualizarPerfilDto
 
     public int IdTitulo { get; set; }
 
+    public string Nickname { get; set; }
+
     public string? Bio { get; set; }
 }

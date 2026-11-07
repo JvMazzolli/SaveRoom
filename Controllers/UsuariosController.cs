@@ -194,5 +194,106 @@ namespace SaveRoom.Controllers
                 nickname = perfil.Nickname
             });
         }
+
+
+        //METODO PARA ATUALIZAR O USER
+        [HttpPut("perfil/{id}")]
+        public async Task<IActionResult> AtualizarPerfil(int id, [FromBody] AtualizarPerfilDto dto)
+        {
+            var perfil = await _context.Perfis.FirstOrDefaultAsync(p => p.IdPerfil == id);
+            if (perfil == null)
+            {
+                return NotFound(new { mensagem = "Perfil não encontrado." });
+            }
+
+            // Atualiza o Nickname se foi informado
+            if (!string.IsNullOrEmpty(dto.Nickname))
+            {
+                perfil.Nickname = dto.Nickname;
+            }
+
+            // Atualiza a Bio se foi informada
+            if (!string.IsNullOrEmpty(dto.Bio))
+            {
+                perfil.Bio = dto.Bio;
+            }
+
+            if (dto.IdAvatar > 0)
+            {
+                perfil.IdAvatar = dto.IdAvatar;
+            }
+
+            if (dto.IdBanner > 0)
+            {
+                perfil.IdBanner = dto.IdBanner;
+            }
+
+            if (dto.IdTitulo > 0)
+            {
+                perfil.IdTitulo = dto.IdTitulo;
+            }
+
+            _context.Perfis.Update(perfil);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensagem = "Perfil atualizado com sucesso!" });
+        }
+
+        // GET: api/Usuarios/perfil/{id}/insignias
+        [HttpGet("perfil/{id}/insignias")]
+        public async Task<IActionResult> ObterInsigniasPerfil(int id)
+        {
+            var perfil = await _context.Perfis
+                .Include(p => p.InsigniaDestaque)
+                .FirstOrDefaultAsync(p => p.IdPerfil == id);
+
+            if (perfil == null) return NotFound(new { mensagem = "Perfil não encontrado." });
+
+            var todasInsignias = await _context.Insignias.ToListAsync();
+
+            var insigniasConquistadasIds = await _context.Set<InsigniaUsuario>()
+                .Where(iu => iu.IdPerfil == id)
+                .Select(iu => iu.IdInsignia)
+                .ToListAsync();
+
+            // CORRIGIDO: .Select() em vez de .map()
+            var resultado = todasInsignias.Select(i => new {
+                idInsignia = i.IdInsignia,
+                nome = i.Nome,
+                descricao = i.Descricao,
+                iconeUrl = i.IconeUrl,
+                conquistada = insigniasConquistadasIds.Contains(i.IdInsignia)
+            }).ToList();
+
+            return Ok(new {
+                insigniaDestaque = perfil.InsigniaDestaque == null ? null : new {
+                    idInsignia = perfil.InsigniaDestaque.IdInsignia,
+                    nome = perfil.InsigniaDestaque.Nome,
+                    iconeUrl = perfil.InsigniaDestaque.IconeUrl
+                },
+                todas = resultado
+            });
+        }
+
+        // PUT: api/Usuarios/perfil/{id}/insignia-destaque
+        [HttpPut("perfil/{id}/insignia-destaque")]
+        public async Task<IActionResult> AtualizarInsigniaDestaque(int id, [FromBody] AtualizarDestaqueDto dto)
+        {
+            var perfil = await _context.Perfis.FirstOrDefaultAsync(p => p.IdPerfil == id);
+            if (perfil == null) return NotFound(new { mensagem = "Perfil não encontrado." });
+
+            if (dto.IdInsignia.HasValue)
+            {
+                var possui = await _context.Set<InsigniaUsuario>()
+                    .AnyAsync(iu => iu.IdPerfil == id && iu.IdInsignia == dto.IdInsignia.Value);
+
+                if (!possui) return BadRequest(new { mensagem = "Você ainda não conquistou esta insígnia." });
+            }
+
+            perfil.IdInsigniaDestaque = dto.IdInsignia;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensagem = "Insígnia em destaque atualizada com sucesso!" });
+        }
     }
 }

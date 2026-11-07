@@ -319,3 +319,38 @@ CREATE TABLE jogo_plataforma (
         REFERENCES public.plataforma(id_plataforma) ON DELETE CASCADE
 );
 
+
+-- 1. Tabela de Insígnias disponíveis no sistema (SaveRoom Badges)
+CREATE TABLE insignia (
+    id_insignia SERIAL PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    descricao TEXT,
+    icone_url TEXT NOT NULL,
+    criterio_tipo VARCHAR(50) NOT NULL, -- ex: 'JOGOS_ADICIONADOS', 'JOGOS_PLATINADOS'
+    criterio_valor INT NOT NULL          -- ex: 1, 10, 20, 50
+);
+
+-- 2. Tabela de insígnias conquistadas por cada perfil
+CREATE TABLE insignia_usuario (
+    id_insignia INT NOT NULL,
+    id_perfil INT NOT NULL,
+    data_conquista TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_insignia, id_perfil),
+    CONSTRAINT fk_insignia_usuario_insignia FOREIGN KEY (id_insignia)
+        REFERENCES public.insignia(id_insignia) ON DELETE CASCADE,
+    CONSTRAINT fk_insignia_usuario_perfil FOREIGN KEY (id_perfil)
+        REFERENCES public.perfil(id_perfil) ON DELETE CASCADE
+);
+
+-- 3. Adicionar coluna na tabela perfil para armazenar a insígnia em destaque selecionada
+ALTER TABLE perfil ADD COLUMN id_insignia_destaque INT;
+ALTER TABLE perfil ADD CONSTRAINT fk_perfil_insignia_destaque 
+    FOREIGN KEY (id_insignia_destaque) REFERENCES public.insignia(id_insignia) ON DELETE SET NULL;
+
+-- 4. Inserir algumas insígnias iniciais de exemplo
+INSERT INTO insignia (nome, descricao, icone_url, criterio_tipo, criterio_valor) VALUES
+('SaveRoom de Primeira Viagem', 'Adicione seu primeiro jogo ao backlog.', 'https://cdn-icons-png.flaticon.com/512/3112/3112946.png', 'JOGOS_ADICIONADOS', 1),
+('Colecionador Iniciante', 'Adicione 10 jogos ao seu backlog.', 'https://cdn-icons-png.flaticon.com/512/2921/2921822.png', 'JOGOS_ADICIONADOS', 10),
+('Mestre do Backlog', 'Adicione 20 jogos ao seu backlog.', 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png', 'JOGOS_ADICIONADOS', 20),
+('Primeiro Sangue', 'Platine o seu primeiro jogo.', 'https://cdn-icons-png.flaticon.com/512/2583/2583344.png', 'JOGOS_PLATINADOS', 1),
+('Caçador de Platinas', 'Platine 10 jogos.', 'https://cdn-icons-png.flaticon.com/512/3112/3112948.png', 'JOGOS_PLATINADOS', 10);

@@ -141,5 +141,46 @@ namespace SaveRoom.Controllers
                 conquistas = resultado
             });
         }
+        private async Task VerificarEAtribuirInsigniasAsync(int idPerfil)
+        {
+            // Conta total de jogos e platinados do perfil
+            int totalJogos = await _context.Backlogs.CountAsync(b => b.IdPerfil == idPerfil);
+            int totalPlatinados = await _context.Backlogs.CountAsync(b => b.IdPerfil == idPerfil && b.Status == "platinado");
+
+            // Busca todas as insígnias do banco
+            var insignias = await _context.Insignias.ToListAsync();
+
+            foreach (var insignia in insignias)
+            {
+                bool atendeuCriterio = false;
+
+                if (insignia.CriterioTipo == "JOGOS_ADICIONADOS" && totalJogos >= insignia.CriterioValor)
+                {
+                    atendeuCriterio = true;
+                }
+                else if (insignia.CriterioTipo == "JOGOS_PLATINADOS" && totalPlatinados >= insignia.CriterioValor)
+                {
+                    atendeuCriterio = true;
+                }
+
+                if (atendeuCriterio)
+                {
+                    // Verifica se já tem
+                    var jaTem = await _context.Set<InsigniaUsuario>()
+                        .AnyAsync(iu => iu.IdPerfil == idPerfil && iu.IdInsignia == insignia.IdInsignia);
+
+                    if (!jaTem)
+                    {
+                        _context.Set<InsigniaUsuario>().Add(new InsigniaUsuario
+                        {
+                            IdPerfil = idPerfil,
+                            IdInsignia = insignia.IdInsignia,
+                            DataConquista = DateTime.UtcNow
+                        });
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
     }
 }

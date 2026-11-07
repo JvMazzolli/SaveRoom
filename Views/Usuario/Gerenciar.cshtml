@@ -1,8 +1,7 @@
 @using System.Security.Claims
 @{
-    ViewData["Title"] = "SAVEROOM - Gerenciar Perfil";
+    ViewData["Title"] = "SAVEROOM - Editar Perfil";
     Layout = null; 
-    // Pega o ID do usuário logado no Cookie
     var usuarioIdLogado = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
 }
 
@@ -12,10 +11,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/gerenciarPerfil.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/gerenciarPerfil.css?v=@DateTime.Now.Ticks" />
 </head>
-<body>
-    <!-- NAVBAR -->
+<body class="steam-edit-body">
+
+    <!-- NAVBAR SAVEROOM -->
     <header class="navbar">
         <h1 class="logo">SAVEROOM</h1>
         <nav>
@@ -29,30 +29,168 @@
         </nav>
     </header>
 
-    <section class="preview">
-        <img id="previewBanner" class="banner" alt="Banner do Perfil">
-        <div class="perfil-box">
-            <img id="previewAvatar" class="avatar" alt="Avatar do Perfil">
-            <h2 id="nickname">Meu Perfil</h2>
+    <!-- CONTAINER PRINCIPAL ESTILO STEAM -->
+    <main class="steam-container">
+        
+        <!-- TOPO DO PERFIL -->
+        <header class="steam-profile-header">
+            <div class="steam-header-info">
+                <div class="steam-avatar-thumb">
+                    <img id="headerAvatar" src="" alt="Avatar">
+                </div>
+                <div class="steam-header-text">
+                    <span id="headerNickname" class="steam-username">Meu Perfil</span>
+                    <span class="steam-breadcrumb">» Editar perfil</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- LAYOUT DE 2 COLUNAS (MENU LATERAL + ABAS ISOLADAS) -->
+        <div class="steam-layout">
+            
+            <!-- MENU LATERAL DA STEAM -->
+            <aside class="steam-sidebar">
+                <a href="/Usuario/Perfil" class="steam-back-link">Voltar ao seu perfil</a>
+                <nav class="steam-nav-list">
+                    <button class="steam-nav-item" data-target="tab-geral">Geral</button>
+                    <button class="steam-nav-item active" data-target="tab-avatar">Avatar</button>
+                    <button class="steam-nav-item" data-target="tab-banner">Plano de fundo do perfil</button>
+                    <button class="steam-nav-item" data-target="tab-miniperfil">Miniperfil</button>
+                    <button class="steam-nav-item" data-target="tab-tema">Tema</button>
+                    <button class="steam-nav-item" data-target="tab-jogo">Perfil de jogo</button>
+                    <button class="steam-nav-item" data-target="tab-insignia">Insígnia em destaque</button>
+                    <div class="steam-nav-divider"></div>
+                    <button class="steam-nav-item" data-target="tab-privacidade">Config. privacidade</button>
+                </nav>
+                <div class="steam-points-wrapper">
+                    <button class="steam-points-btn" type="button">Loja de pontos</button>
+                </div>
+            </aside>
+
+            <!-- CONTEÚDO DAS ABAS -->
+            <div class="steam-content">
+                
+                
+                <!-- ABA 1: GERAL -->
+                <div id="tab-geral" class="tab-pane">
+                    <h2 class="steam-section-title">Geral</h2>
+                    <p class="steam-section-sub">Gerencie as informações da sua conta, apelido e resumo do perfil.</p>
+    
+                    <div class="steam-form-group">
+                        <label for="inputNickname">Nome de Perfil (Nickname)</label>
+                        <input type="text" id="inputNickname" class="steam-input" placeholder="Seu nickname">
+                    </div>
+
+                    <div class="steam-form-group">
+                        <label for="inputBio">Resumo / Sobre Mim (Bio)</label>
+                        <textarea id="inputBio" class="steam-input steam-textarea" rows="4" placeholder="Escreva algo sobre você..."></textarea>
+                    </div>
+                </div>
+
+                <!-- ABA 2: AVATAR (APENAS PRÉ-VISUALIZAÇÃO E MOLDURAS/AVATARES) -->
+                <div id="tab-avatar" class="tab-pane active">
+                    <h2 class="steam-section-title">Avatar</h2>
+                    <p class="steam-section-sub">Escolha a imagem e a moldura do seu avatar[cite: 4].</p>
+
+                    <div class="steam-preview-block">
+                        <div class="steam-previews-group">
+                            <div class="steam-preview-item preview-184">
+                                <div class="avatar-frame">
+                                    <img id="previewAvatar184" class="previewAvatar" src="" alt="184px">
+                                </div>
+                                <span class="size-label">184px</span>
+                            </div>
+
+                            <div class="steam-preview-item preview-64">
+                                <div class="avatar-frame">
+                                    <img id="previewAvatar64" class="previewAvatar" src="" alt="64px">
+                                </div>
+                                <span class="size-label">64px</span>
+                            </div>
+
+                            <div class="steam-preview-item preview-32">
+                                <div class="avatar-frame">
+                                    <img id="previewAvatar32" class="previewAvatar" src="" alt="32px">
+                                </div>
+                                <span class="size-label">32px</span>
+                            </div>
+                        </div>
+
+                        <div class="steam-upload-box">
+                            <button class="steam-upload-btn" type="button">Envie o seu avatar</button>
+                            <p>Envie um arquivo do seu dispositivo. A imagem deve ser quadrada e ter dimensões mínimas de 184 px x 184 px[cite: 4].</p>
+                        </div>
+                    </div>
+
+                    <div class="steam-gallery-section">
+                        <h3 class="steam-gallery-title">Seus avatares</h3>
+                        <div id="avatar-list" class="steam-avatar-grid"></div>
+                    </div>
+                </div>
+
+                <!-- ABA 3: PLANO DE FUNDO DO PERFIL (APENAS BANNERS) -->
+                <div id="tab-banner" class="tab-pane">
+                    <h2 class="steam-section-title">Plano de fundo do perfil</h2>
+                    <p class="steam-section-sub">Selecione uma imagem de fundo para ser exibida na sua página do perfil[cite: 5].</p>
+
+                    <div class="steam-banner-preview-box">
+                        <img id="previewBanner" class="banner-preview-img" alt="Preview Banner">
+                    </div>
+
+                    <div class="steam-gallery-section">
+                        <h3 class="steam-gallery-title">Seus planos de fundo</h3>
+                        <div id="banner-list" class="steam-banner-grid"></div>
+                    </div>
+                </div>
+
+                <!-- OUTRAS ABAS -->
+                <div id="tab-miniperfil" class="tab-pane"><h2 class="steam-section-title">Miniperfil</h2></div>
+                <div id="tab-tema" class="tab-pane"><h2 class="steam-section-title">Tema</h2></div>
+                <div id="tab-jogo" class="tab-pane"><h2 class="steam-section-title">Perfil de jogo</h2></div>
+                <!-- ABA: INSÍGNIA EM DESTAQUE -->
+                <div id="tab-insignia" class="tab-pane">
+                    <h2 class="steam-section-title">Insígnia em destaque</h2>
+                    <p class="steam-section-sub">Escolha uma insígnia para exibir em destaque no topo da sua página de perfil.</p>
+
+                    <!-- PRÉ-VISUALIZAÇÃO DA INSÍGNIA SELECIONADA -->
+                    <div class="steam-featured-badge-box">
+                        <div class="featured-badge-preview">
+                            <img id="previewInsigniaDestaque" src="" alt="Destaque">
+                        </div>
+                        <div class="featured-badge-info">
+                            <h3 id="destaqueNome">Nenhuma insígnia selecionada</h3>
+                            <p id="destaqueDesc">Selecione uma das suas insígnias conquistadas abaixo.</p>
+                        </div>
+                    </div>
+
+                    <!-- GRADE DE INSÍGNIAS DO USUÁRIO -->
+                    <div class="steam-gallery-section">
+                        <h3 class="steam-gallery-title">Suas insígnias</h3>
+                        <div id="insignias-list" class="steam-insignia-grid"></div>
+                    </div>
+                </div>
+                <div id="tab-privacidade" class="tab-pane"><h2 class="steam-section-title">Config. privacidade</h2></div>
+
+                <!-- BOTÃO SALVAR -->
+                <div class="steam-actions-bar">
+                    <button id="btnSalvar" class="steam-save-btn">Salvar Alterações</button>
+                </div>
+                <!-- TOAST DE NOTIFICAÇÃO ESTILO STEAM -->
+                <div id="steamToast" class="steam-toast">
+                    <div class="toast-content">
+                        <span class="toast-icon">✓</span>
+                        <span id="toastMessage">Alterações salvas com sucesso!</span>
+                    </div>
+                    <div class="toast-progress"></div>
+                </div>
+
+            </div>
         </div>
-    </section>
+    </main>
 
-    <section>
-        <h2>Escolha um Avatar</h2>
-        <div id="avatar-list"></div>
-    </section>
-
-    <section>
-        <h2>Escolha um Banner</h2>
-        <div id="banner-list"></div>
-    </section>
-
-    <button id="btnSalvar">Salvar Alterações</button>
-
-    <!-- Injeta o ID logado automaticamente Js -->
     <script>
         const USUARIO_LOGADO_ID = "@usuarioIdLogado";
     </script>
-    <script src="~/js/gerenciarPerfil.js" asp-append-version="true"></script>
+    <script src="~/js/gerenciarPerfil.js?v=@DateTime.Now.Ticks"></script>
 </body>
 </html>

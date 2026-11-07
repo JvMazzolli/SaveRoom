@@ -14,13 +14,13 @@ namespace SaveRoom.Models
         public int IdUsuario { get; set; }
 
         [Column("id_avatar")]
-        public int IdAvatar {get; set;}
+        public int IdAvatar { get; set; }
 
         [Column("id_banner")]
-        public int IdBanner {get;set;}
+        public int IdBanner { get; set; }
 
         [Column("id_titulo")]
-        public int IdTitulo {get;set;}
+        public int IdTitulo { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -30,6 +30,9 @@ namespace SaveRoom.Models
         [Column("bio")]
         public string? Bio { get; set; }
 
+        [Column("id_insignia_destaque")]
+        public int? IdInsigniaDestaque { get; set; }
+
         [ForeignKey(nameof(IdUsuario))]
         public Usuario? Usuario { get; set; }
 
@@ -38,12 +41,14 @@ namespace SaveRoom.Models
         
         [ForeignKey(nameof(IdBanner))]
         public Banner? Banner { get; set; }
+
         [ForeignKey(nameof(IdTitulo))]
         public TituloPerfil? TituloPerfil { get; set; }
 
+        [ForeignKey(nameof(IdInsigniaDestaque))]
+        public Insignia? InsigniaDestaque { get; set; }
+
         public ICollection<Backlog> Backlogs { get; set; } = new List<Backlog>();
         public ICollection<Analise> Analises { get; set; } = new List<Analise>();
-       
-             
     }
 }

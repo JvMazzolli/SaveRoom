@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joaov\\SaveRoom\\SaveRoom\\SaveRoom.csproj": {}
+    "C:\\Users\\joaov\\SaveRoom\\SaveRoom.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joaov\\SaveRoom\\SaveRoom\\SaveRoom.csproj": {
+    "C:\\Users\\joaov\\SaveRoom\\SaveRoom.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joaov\\SaveRoom\\SaveRoom\\SaveRoom.csproj",
+        "projectUniqueName": "C:\\Users\\joaov\\SaveRoom\\SaveRoom.csproj",
         "projectName": "SaveRoom",
-        "projectPath": "C:\\Users\\joaov\\SaveRoom\\SaveRoom\\SaveRoom.csproj",
+        "projectPath": "C:\\Users\\joaov\\SaveRoom\\SaveRoom.csproj",
         "packagesPath": "C:\\Users\\joaov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joaov\\SaveRoom\\SaveRoom\\obj\\",
+        "outputPath": "C:\\Users\\joaov\\SaveRoom\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
