@@ -1,4 +1,5 @@
 namespace SaveRoom.Models.Filters
+// JOAO VICTOR
 {
     public class RawGameFilter // Aqui é os filtros que vocês vão utilizar para puxar coisas da API. Para utilizar como base é somente olhar o Get a list of games da API.
     {

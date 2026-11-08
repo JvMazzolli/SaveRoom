@@ -1,7 +1,7 @@
 @using System.Security.Claims
 @{
     ViewData["Title"] = "SAVEROOM - Perfil";
-    Layout = null; // Ou remova se estiver usando _Layout.cshtml
+    Layout = null;
     var usuarioIdLogado = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
 }
 
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="~/css/perfil.css" asp-append-version="true">
 </head>
 <body>
-    <!-- NAVB -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <h1 class="logo">SAVEROOM</h1>
         <nav>
@@ -28,74 +28,98 @@
         </nav>
     </header>
 
+    <!-- BANNER DO PERFIL -->
     <section class="banner">
         <img id="banner-img" src="" alt="Banner do Perfil">
     </section>
 
-    <!-- PERFIL -->    
-    <section class="profile">
-        <!-- COLUNA PRINCIPAL (AVATAR + DADOS DO PERIL) -->
-        <div class="profile-header-wrapper">
-            <div class="avatar">
-                <img id="avatar" src="" alt="Avatar do usuário">
-            </div>
-            <div class="profile-main-col">
-                <!-- INFORMAÇÕES BÁSICAS DO USUÁRIO -->
-                <div class="info">
+    <!-- CONTAINER PRINCIPAL DO PERFIL (ESTILO STEAM DARK) -->
+    <section class="profile-container">
+        
+        <!-- COLUNA ESQUERDA: AVATAR + CONTEÚDO -->
+        <div class="profile-left-column">
+            <div class="profile-header-card">
+                <div class="avatar-container">
+                    <div class="avatar-frame">
+                        <img id="avatar" src="" alt="Avatar do usuário">
+                    </div>
+                </div>
+                <div class="profile-user-titles">
                     <h1 id="username">Usuário</h1>
                     <span id="titulo-perfil" class="profile-title">Velha Guarda</span>
-                    
-                    <!-- BARRA DE NÍVEL DA CONTA (ainda devo alterar para ficar dinamico) -->
-                    <div class="account-level-container">
-                        <div class="level-badge-header">
-                            <span>Nível <strong id="level">1</strong></span>
-                            <span class="level-xp-text">XP 450 / 1000</span>
-                        </div>
-                        <div class="level-bar-background">
-                            <div class="level-bar-fill" style="width: 45%;"></div>
-                        </div>
-                    </div>
                     <div class="profile-details">
                         <span>ID <strong id="user-id"></strong></span>
                     </div>
                 </div>
 
-                <!-- BIO, DESCRIÇÕES E LINKS (tambem sera evoluido) -->
-                <div class="profile-bio-box">
-                    <h3>Sobre mim</h3>
-                    <p id="user-bio">Carregando biografia...</p>
-                    <div class="profile-links">
-                        <a href="#" target="_blank">Steam</a>
-                        <a href="#" target="_blank">Discord</a>
+                <!-- WIDGET DE NÍVEL DA CONTA -->
+                <div class="account-level-container">
+                    <div class="level-badge-header">
+                        <span>Nível <strong id="level">1</strong></span>
+                        <span class="level-xp-text">XP 450 / 1000</span>
                     </div>
+                    <div class="level-bar-background">
+                        <div class="level-bar-fill" style="width: 45%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BIO E LINKS -->
+            <div class="profile-bio-box">
+                <h3>Sobre mim</h3>
+                <p id="user-bio">Carregando biografia...</p>
+                <div class="profile-links">
+                    <a href="#" target="_blank">Steam</a>
+                    <a href="#" target="_blank">Discord</a>
                 </div>
                 <button id="manage-profile">Gerenciar Perfil</button>
             </div>
         </div>
 
-        <!-- Parte de Estatisticas (vou alterar tambem) -->
-        <div class="profile-stats-box">
-            <h3>Estatísticas da Conta</h3>
-            <div class="stat-item">
-                <span class="stat-label">Nível da Conta</span>
-                <span class="stat-value" id="stat-level">1</span>
+        <!-- COLUNA DIREITA: STATUS E ESTATÍSTICAS DA CONTA (ESTILO STEAM) -->
+        <div class="profile-right-column">
+            <div class="steam-status-box">
+                <div class="status-indicator online">On-line</div>
+                <span class="status-subtext">Disponível para jogar</span>
             </div>
-            <div class="stat-item">
-                <span class="stat-label">Total de Conquistas</span>
-                <span class="stat-value" id="stat-achievements">142</span>
+
+            <div class="profile-stats-box">
+                <h3>Estatísticas da Conta</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Nível da Conta</span>
+                    <span class="stat-value" id="stat-level">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total de Conquistas</span>
+                    <span class="stat-value" id="stat-achievements">142</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Jogos no Backlog</span>
+                    <span class="stat-value" id="stat-backlog">28</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Jogos Platinados</span>
+                    <span class="stat-value" id="stat-platinums">5</span>
+                </div>
             </div>
-            <div class="stat-item">
-                <span class="stat-label">Jogos no Backlog</span>
-                <span class="stat-value" id="stat-backlog">28</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Jogos Platinados</span>
-                <span class="stat-value" id="stat-platinums">5</span>
+
+            <!-- BLOCO DE ATALHOS / INSÍGNIAS (ESTILO STEAM) -->
+            <div class="steam-badges-box">
+                <div class="badges-header">
+                    <span>Insígnias</span>
+                    <span class="badges-count">3</span>
+                </div>
+                <div class="badges-row">
+                    <div class="badge-item lvl">50+</div>
+                    <div class="badge-item num">1</div>
+                    <div class="badge-item icon">🎮</div>
+                </div>
             </div>
         </div>
+
     </section>
 
-    <!-- TESTE POR ID (JÁ PODE SER EXCLUIDO) -->
+    <!-- TESTE POR ID (MODO TESTE) -->
     <section class="dev-tools">
         <h3>Buscar Perfil (Modo Teste)</h3>
         <div class="backlog-search">
@@ -104,7 +128,7 @@
         </div>
     </section>
 
-    <!--- BACKLOG -->
+    <!-- ATIVIDADES RECENTES / BACKLOG -->
     <section class="activities">
         <div class="activities-header">
             <h2>Atividades Recentes</h2>

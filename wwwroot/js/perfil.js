@@ -49,7 +49,7 @@ function preencherPerfil(perfil) {
     document.getElementById("user-id").textContent = perfil.idPerfil ?? "";
 
     const tituloPerfil = document.getElementById("titulo-perfil");
-    if (tituloPerfil) {
+    if (tituloPerfil == null) {
         tituloPerfil.textContent = perfil.titulo ?? "Velha Guarda";
     }
 
@@ -61,18 +61,39 @@ function preencherPerfil(perfil) {
         document.getElementById("banner-img").src = perfil.banner.imageUrl;
     }
 
-    // Nível e XP
-    const nivel = perfil.nivel ?? 1;
-    const xpAtual = perfil.xpAtual ?? 450;
-    const xpProximoNivel = perfil.xpProximoNivel ?? 1000;
-    const porcentagemXp = Math.min(100, Math.round((xpAtual / xpProximoNivel) * 100));
+    const backlog = perfil.backlog ?? [];
 
+    // --- CÁLCULO DINÂMICO DE XP E NÍVEIS ---
+    // Regra: 
+    // - Cada jogo no backlog/adicionado = 100 XP
+    // - Cada jogo platinado/concluído = 250 XP adicionais
+    let totalJogos = backlog.length;
+    let totalPlatinados = backlog.filter(jogo => {
+        const status = (jogo.status || '').toLowerCase();
+        return status === 'platinado' || status === 'concluido' || status === 'finalizado';
+    }).length;
+
+    // Se houver estatísticas da API, podemos usar como fallback ou base, mas calculamos o XP real:
+    let xpCalculado = (totalJogos * 100) + (totalPlatinados * 250);
+    
+    // Se o perfil já mandar um xpAtual base do banco, você pode somar ou usar direto. 
+    // Aqui usamos o XP calculado pelas regras do seu backlog + um bônus base da conta:
+    const xpBaseConta = perfil.xpAtualBase ?? 200; 
+    const xpTotalAcumulado = xpBaseConta + xpCalculado;
+
+    // Cada nível exige 1000 XP para subir (ex: Nível = 1 + floor(XP / 1000))
+    const nivelCalculado = Math.floor(xpTotalAcumulado / 1000) + 1;
+    const xpAtualNoNivel = xpTotalAcumulado % 1000;
+    const xpProximoNivel = 1000;
+    const porcentagemXp = Math.min(100, Math.round((xpAtualNoNivel / xpProximoNivel) * 100));
+
+    // Atualiza Nível na Interface
     const levelElement = document.getElementById("level");
-    if (levelElement) levelElement.textContent = nivel;
+    if (levelElement) levelElement.textContent = nivelCalculado;
     
     const levelXpText = document.querySelector(".level-xp-text");
     if (levelXpText) {
-        levelXpText.textContent = `XP ${xpAtual} / ${xpProximoNivel}`;
+        levelXpText.textContent = `XP ${xpAtualNoNivel} / ${xpProximoNivel}`;
     }
 
     const levelBarFill = document.querySelector(".level-bar-fill");
@@ -101,12 +122,11 @@ function preencherPerfil(perfil) {
         }
     }
 
-    // Estatísticas
-    const totalBacklogCalculado = perfil.backlog ? perfil.backlog.length : 28;
-    document.getElementById("stat-level").textContent = perfil.estatisticas?.nivelConta ?? nivel;
-    document.getElementById("stat-achievements").textContent = perfil.estatisticas?.totalConquistas ?? 142;
-    document.getElementById("stat-backlog").textContent = perfil.estatisticas?.totalBacklog ?? totalBacklogCalculado;
-    document.getElementById("stat-platinums").textContent = perfil.estatisticas?.totalPlatinas ?? 5;
+    // Estatísticas Atualizadas Dinamicamente com os dados reais
+    document.getElementById("stat-level").textContent = nivelCalculado;
+    document.getElementById("stat-achievements").textContent = perfil.estatisticas?.totalConquistas ?? (totalPlatinados * 33 + totalJogos * 5);
+    document.getElementById("stat-backlog").textContent = totalJogos;
+    document.getElementById("stat-platinums").textContent = totalPlatinados;
 }
 
 function limparDescricao(texto) {

@@ -18,6 +18,7 @@ namespace SaveRoom.Controllers
             return View();
         }
 
+        //JOAO VICTOR
         [HttpGet]
         public IActionResult Gerenciar()
         {

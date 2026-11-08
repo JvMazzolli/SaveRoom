@@ -195,7 +195,7 @@ namespace SaveRoom.Controllers
             });
         }
 
-
+        // JOAO VICTOR
         //METODO PARA ATUALIZAR O USER
         [HttpPut("perfil/{id}")]
         public async Task<IActionResult> AtualizarPerfil(int id, [FromBody] AtualizarPerfilDto dto)
