@@ -28,6 +28,9 @@ namespace SaveRoom.Models
         [Column("imagem_capa")]
         public string? ImagemCapa { get; set; }
 
+        [Column("imagem_adicional")]
+        public string? ImagemAdicional { get; set; }
+
         [MaxLength(150)]
         [Column("desenvolvedora")]
         public string? DEsenvolvedora { get; set; }

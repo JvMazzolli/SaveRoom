@@ -143,7 +143,11 @@
         <div class="jogo-bloco">
           <h2 class="jogo-bloco-titulo">Voz da Comunidade (Reddit)</h2>
           <div class="jogo-lista-avaliacoes">
-    
+
+            <!-- ========================================== -->
+            <!-- CÓDIGO DA API RAWG (COMENTADO / MODO OFFLINE) -->
+            <!-- ========================================== -->
+            @*
             @if(Model.PostsDaComunidade != null && Model.PostsDaComunidade.Any())
             {
                 @foreach (var post in Model.PostsDaComunidade.Take(3)) 
@@ -163,6 +167,10 @@
             {
               <p class="jogo-texto">Nenhuma discussão encontrada para este jogo.</p>
             }
+            *@
+
+            <!-- Mensagem de modo offline -->
+            <p class="jogo-texto">Integração com a comunidade temporariamente offline.</p>
 
           </div>
         </div>
@@ -171,6 +179,10 @@
             <h2 class="jogo-bloco-titulo">Onde Jogar / Plataformas</h2>
             <ul class="jogo-plataformas">
     
+            <!-- ========================================== -->
+            <!-- CÓDIGO DA API RAWG (COMENTADO / MODO OFFLINE) -->
+            <!-- ========================================== -->
+            @*
             @if(Model.Platforms != null && Model.Platforms.Any())
             {
                 @foreach (var item in Model.Platforms)
@@ -178,6 +190,22 @@
                     <li class="plataforma-tag">@item.Platform.Name</li>
                 }
             } 
+            else
+            {
+                <li class="plataforma-tag">Plataformas não informadas</li>
+            }
+            *@
+
+            <!-- ========================================== -->
+            <!-- NOVO CÓDIGO: LENDO DO BANCO DE DADOS LOCAL -->
+            <!-- ========================================== -->
+            @if(!string.IsNullOrEmpty(ViewBag.PlataformasString))
+            {
+                @foreach (var plat in ViewBag.PlataformasString.Split(','))
+                {
+                    <li class="plataforma-tag">@plat.Trim()</li>
+                }   
+            }
             else
             {
                 <li class="plataforma-tag">Plataformas não informadas</li>
@@ -217,63 +245,74 @@
 
 @section Scripts {
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const btnAdicionar = document.getElementById('btnAdicionarColecao');
             const mensagemFeedback = document.getElementById('mensagemFeedback');
+            const hdnIdPerfil = document.getElementById('hdnIdPerfil');
+            const hdnNomeJogo = document.getElementById('hdnNomeJogo');
 
-            if (btnAdicionar) {
-                btnAdicionar.addEventListener('click', async function () {
-                    // 1. Coletar os dados
-                    const idPerfilStr = document.getElementById('hdnIdPerfil').value;
-                    const nomeJogo = document.getElementById('hdnNomeJogo').value;
-                    
-                    // Validação simples
-                    if (!idPerfilStr || !nomeJogo) {
-                        mostrarMensagem("Erro: Informações incompletas para adicionar ao backlog.", "vermelho");
-                        return;
-                    }
+            if (!btnAdicionar || !hdnIdPerfil || !hdnNomeJogo) return;
 
-                    const idPerfil = parseInt(idPerfilStr, 10);
+            const idPerfil = parseInt(hdnIdPerfil.value, 10);
+            const nomeJogo = hdnNomeJogo.value;
+            let naColecao = false;
 
-                    // 2. Montar o DTO
-                    const dto = {
-                        idPerfil: idPerfil,
-                        nomeJogo: nomeJogo,
-                        status: "a_jogar" // Status padrão definido no DTO
-                    };
-
-                    try {
-                        // 3. Fazer a requisição POST para a API
-                        const resposta = await fetch('/api/Backlog/adicionar', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(dto)
-                        });
-
-                        const dados = await resposta.json();
-
-                        // 4. Lidar com a resposta
-                        if (resposta.ok) {
-                            mostrarMensagem(dados.mensagem || "Jogo adicionado com sucesso!", "verde");
-                            btnAdicionar.innerText = "Na Coleção";
-                            btnAdicionar.disabled = true;
-                        } else {
-                            mostrarMensagem(dados.mensagem || "Erro ao adicionar o jogo.", "vermelho");
-                        }
-                    } catch (erro) {
-                        console.error("Erro na requisição:", erro);
-                        mostrarMensagem("Erro de comunicação com o servidor.", "vermelho");
-                    }
-                });
+            // 1. Checar ao carregar a página se o jogo já está na coleção local
+            try {
+                const res = await fetch(`/Jogos/VerificarNaColecao?idPerfil=${idPerfil}&nomeJogo=${encodeURIComponent(nomeJogo)}`);
+                const data = await res.json();
+                naColecao = data.naColecao;
+                atualizarBotaoVisual();
+            } catch (e) {
+                console.error("Erro ao verificar status do jogo:", e);
+                btnAdicionar.innerText = "Adicionar à Coleção";
             }
 
-            // Função auxiliar para exibir feedback ao usuário
+            // 2. Ação de clique do botão (Alterna dinamicamente entre Adicionar e Remover)
+            btnAdicionar.addEventListener('click', async function () {
+                // Se já estiver na coleção, chama a rota de remover, senão adiciona
+                const endpoint = naColecao ? '/Jogos/RemoverDoBacklog' : '/Jogos/AdicionarAoBacklog';
+                const dto = { idPerfil: idPerfil, nomeJogo: nomeJogo, status: "a_jogar" };
+
+                try {
+                    const resposta = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dto)
+                    });
+
+                    const dados = await resposta.json();
+
+                    if (resposta.ok) {
+                        naColecao = !naColecao; // Inverte o estado atual
+                        atualizarBotaoVisual();
+                        mostrarMensagem(dados.mensagem || "Operação realizada com sucesso!", "verde");
+                    } else {
+                        mostrarMensagem(dados.mensagem || "Erro ao processar solicitação.", "vermelho");
+                    }
+                } catch (erro) {
+                    console.error("Erro na requisição:", erro);
+                    mostrarMensagem("Erro de comunicação com o servidor.", "vermelho");
+                }
+            });
+
+            function atualizarBotaoVisual() {
+                if (naColecao) {
+                    btnAdicionar.innerText = "Remover da Coleção";
+                    btnAdicionar.style.backgroundColor = "#d9534f"; // Vermelho suave indicando remoção
+                    btnAdicionar.style.color = "#fff";
+                } else {
+                    btnAdicionar.innerText = "Adicionar à Coleção";
+                    btnAdicionar.style.backgroundColor = ""; // Retorna para a cor padrão do CSS
+                    btnAdicionar.style.color = "";
+                }
+            }
+
             function mostrarMensagem(texto, cor) {
                 mensagemFeedback.innerText = texto;
                 mensagemFeedback.style.color = cor === "verde" ? "green" : "red";
                 mensagemFeedback.style.display = "block";
+                setTimeout(() => { mensagemFeedback.style.display = "none"; }, 4000);
             }
         });
     </script>

@@ -215,6 +215,7 @@ CREATE TABLE jogo (
     data_lancamento DATE,
     id_rawg INT UNIQUE,
     imagem_capa TEXT,
+    imagem_adicional TEXT, 
     desenvolvedora VARCHAR(150),
     publicadora VARCHAR(150),
     rating DOUBLE PRECISION,
@@ -354,3 +355,220 @@ INSERT INTO insignia (nome, descricao, icone_url, criterio_tipo, criterio_valor)
 ('Mestre do Backlog', 'Adicione 20 jogos ao seu backlog.', 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png', 'JOGOS_ADICIONADOS', 20),
 ('Primeiro Sangue', 'Platine o seu primeiro jogo.', 'https://cdn-icons-png.flaticon.com/512/2583/2583344.png', 'JOGOS_PLATINADOS', 1),
 ('Caçador de Platinas', 'Platine 10 jogos.', 'https://cdn-icons-png.flaticon.com/512/3112/3112948.png', 'JOGOS_PLATINADOS', 10);
+
+--API OFF-----------------------------------------------------------------------------
+
+INSERT INTO jogo 
+(id_rawg, nome, descricao, data_lancamento, imagem_capa, imagem_adicional, desenvolvedora, publicadora, rating, metacritic, plataformas)
+VALUES 
+-- 1. Grand Theft Auto V
+(
+    3498, 
+    'Grand Theft Auto V', 
+    'Quando um malandro de rua, um ladrão de bancos aposentado e um psicopata aterrorizante se envolvem com alguns dos criminosos mais assustadores e loucos do submundo, o governo dos EUA e a indústria do entretenimento, eles devem realizar uma série de golpes perigosos para sobreviver.', 
+    '2013-09-17', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg', 
+    'Rockstar North', 
+    'Rockstar Games', 
+    4.47, 
+    92, 
+    'PC, PlayStation 5, Xbox Series X/S, PlayStation 4, Xbox One'
+),
+
+-- 2. Hollow Knight
+(
+    9767, 
+    'Hollow Knight', 
+    'Forje seu próprio caminho em Hollow Knight! Uma aventura de ação épica em um vasto reino arruinado de insetos e heróis. Explore cavernas sinuosas, lute contra criaturas maculadas e faça amizade com insetos bizarros, tudo em um estilo clássico 2D desenhado à mão.', 
+    '2017-02-24', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/367520/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg', 
+    'Team Cherry', 
+    'Team Cherry', 
+    4.4, 
+    90, 
+    'PC, macOS, Linux, Nintendo Switch, PlayStation 4, Xbox One'
+),
+
+-- 3. The Last of Us Part I
+(
+    801229, 
+    'The Last of Us Part I', 
+    'Em uma civilização devastada, onde infectados e sobreviventes experientes correm soltos, Joel é contratado para contrabandear uma garota de 14 anos, Ellie, para fora de uma zona de quarentena militar.', 
+    '2022-09-02', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1888930/header.jpg', 
+    'Naughty Dog', 
+    'PlayStation PC', 
+    4.5, 89, 
+    'PlayStation 5, PC'
+),
+
+-- 4. Horizon Zero Dawn
+(
+    278, 
+    'Horizon Zero Dawn', 
+    'Experimente a lendária jornada de Aloy para desvendar os mistérios de uma Terra do futuro controlada por máquinas. Uma exilada de sua tribo, ela luta para descobrir seu passado.', 
+    '2017-02-28', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1151640/header.jpg', 
+    'Guerrilla Games', 
+    'PlayStation PC', 
+    4.3, 89, 
+    'PlayStation 4, PC'
+),
+
+-- 5. Bloodborne
+(
+    8012, 
+    'Bloodborne', 
+    'Enfrente seus pesadelos enquanto busca respostas na antiga cidade de Yharnam, agora amaldiçoada com uma doença endêmica que se espalha pelas ruas.', 
+    '2015-03-24', 
+    'https://image.api.playstation.com/vulcan/img/rnd/202010/2614/nlMQhRjBuUntqrhyjqjwnqJe.png', 
+    'https://image.api.playstation.com/vulcan/img/rnd/202010/2614/4Kqf8v1O9c67k6b3n6Yj2w7K.png', 
+    'FromSoftware', 
+    'Sony Computer Entertainment', 
+    4.4, 92, 
+    'PlayStation 4'
+),
+
+-- 6. Super Mario Odyssey
+(
+    28568, 
+    'Super Mario Odyssey', 
+    'Explore lugares incríveis bem longe do Reino Cogumelo enquanto você se junta a Mario e seu novo aliado Cappy em uma enorme aventura 3D.', 
+    '2017-10-27', 
+    'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_500/ncom/en_US/games/switch/s/super-mario-odyssey-switch/hero', 
+    'https://assets.nintendo.com/image/upload/f_auto/q_auto/c_max,w_1200/ncom/en_US/games/switch/s/super-mario-odyssey-switch/screenshot01', 
+    'Nintendo', 
+    'Nintendo', 
+    4.5, 97, 
+    'Nintendo Switch'
+),
+
+-- 7. The Legend of Zelda: Breath of the Wild
+(
+    22511, 
+    'The Legend of Zelda: Breath of the Wild', 
+    'Esqueça tudo que você sabe sobre os jogos The Legend of Zelda. Entre em um mundo de descobertas, exploração e aventura.', 
+    '2017-03-03', 
+    'https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_500/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero', 
+    'https://assets.nintendo.com/image/upload/f_auto/q_auto/c_max,w_1200/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/screenshot01', 
+    'Nintendo', 
+    'Nintendo', 
+    4.7, 97, 
+    'Nintendo Switch, Wii U'
+),
+
+-- 8. Persona 5 Royal
+(
+    326238, 
+    'Persona 5 Royal', 
+    'Coloque a máscara do Joker e junte-se aos Phantom Thieves of Hearts. Liberte-se das correntes da sociedade moderna e encene grandes assaltos.', 
+    '2019-10-31', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1687950/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1687950/header.jpg', 
+    'Atlus', 
+    'SEGA', 
+    4.8, 95, 
+    'PlayStation 5, PlayStation 4, Xbox Series X/S, PC, Switch'
+),
+
+-- 9. Sekiro: Shadows Die Twice
+(
+    23585, 
+    'Sekiro: Shadows Die Twice', 
+    'Explore o Japão no final dos anos 1500, um período brutal de conflitos, enquanto você enfrenta inimigos maiores que a vida em um mundo sombrio.', 
+    '2019-03-21', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/814380/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg', 
+    'FromSoftware', 
+    'Activision Blizzard', 
+    4.5, 90, 
+    'PlayStation 4, Xbox One, PC'
+),
+
+-- 10. Ghost of Tsushima
+(
+    58023, 
+    'Ghost of Tsushima', 
+    'No final do século 13, o império mongol devastou nações inteiras. Jin Sakai deve deixar de lado as tradições dos samurais para proteger a ilha de Tsushima.', 
+    '2020-07-17', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/2215430/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/2215430/header.jpg', 
+    'Sucker Punch Productions', 
+    'Sony Interactive Entertainment', 
+    4.6, 83, 
+    'PlayStation 4, PlayStation 5'
+),
+
+-- 11. Marvels Spider-Man Remastered
+(
+    58134, 
+    'Marvels Spider-Man Remastered', 
+    'Os mundos de Peter Parker e do Homem-Aranha colidem em uma história original cheia de ação.', 
+    '2018-09-07', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1817070/header.jpg', 
+    'Insomniac Games', 
+    'PlayStation PC', 
+    4.5, 87, 
+    'PlayStation 5, PlayStation 4, PC'
+),
+
+-- 12. Dark Souls III
+(
+    2462, 
+    'Dark Souls III', 
+    'Conforme os fogos se apagam e o mundo cai em ruínas, a jornada continua em um universo repleto de inimigos e ambientes colossais.', 
+    '2016-03-24', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/374320/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/374320/header.jpg', 
+    'FromSoftware', 
+    'Bandai Namco', 
+    4.4, 89, 
+    'PlayStation 4, Xbox One, PC'
+),
+
+-- 13. DOOM Eternal
+(
+    25889, 
+    'DOOM Eternal', 
+    'Os exércitos do inferno invadiram a Terra. Torne-se o Slayer em uma campanha épica para matar demônios em várias dimensões e impedir a destruição da humanidade.', 
+    '2020-03-20', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/782330/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/782330/header.jpg', 
+    'id Software', 
+    'Bethesda Softworks', 
+    4.6, 88, 
+    'PlayStation 4, Xbox One, PC, Nintendo Switch'
+),
+
+-- 14. BioShock Infinite
+(
+    10035, 
+    'BioShock Infinite', 
+    'Endividado com as pessoas erradas, com a vida em risco, veterano da cavalaria dos EUA se torna mercenário. Booker DeWitt só tem uma chance de recomeçar.', 
+    '2013-03-26', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/8870/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/8870/header.jpg', 
+    'Irrational Games', 
+    '2K Games', 
+    4.4, 94, 
+    'PlayStation 4, Xbox One, PC, Nintendo Switch'
+),
+
+-- 15. Mass Effect Legendary Edition
+(
+    513256, 
+    'Mass Effect Legendary Edition', 
+    'Uma pessoa é tudo o que se interpõe entre a humanidade e a maior ameaça que ela já enfrentou. Reviva a lenda de Comandante Shepard.', 
+    '2021-05-14', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1328670/library_600x900.jpg', 
+    'https://cdn.cloudflare.steamstatic.com/steam/apps/1328670/header.jpg', 
+    'BioWare', 
+    'Electronic Arts', 
+    4.7, 90, 
+    'PlayStation 4, Xbox One, PC'
+);
