@@ -97,6 +97,9 @@ namespace SaveRoom.Controllers
                         _context.Backlogs.Add(itemBacklog);
                         }
                         await _context.SaveChangesAsync();
+
+                        var novasInsigniasConquistadas = await VerificarEAtribuirInsigniasAsync(dto.IdPerfil);
+
                         return Ok(new
                         {
                             mensagem = "jogo adicionado com sucecsso ao backlog",
@@ -141,14 +144,13 @@ namespace SaveRoom.Controllers
                 conquistas = resultado
             });
         }
-        private async Task VerificarEAtribuirInsigniasAsync(int idPerfil)
+        private async Task<List<object>> VerificarEAtribuirInsigniasAsync(int idPerfil)
         {
-            // Conta total de jogos e platinados do perfil
             int totalJogos = await _context.Backlogs.CountAsync(b => b.IdPerfil == idPerfil);
-            int totalPlatinados = await _context.Backlogs.CountAsync(b => b.IdPerfil == idPerfil && b.Status == "platinado");
+            int totalPlatinados = await _context.Backlogs.CountAsync(b => b.IdPerfil == idPerfil && (b.Status == "platinado" || b.Status == "concluido"));
 
-            // Busca todas as insígnias do banco
             var insignias = await _context.Insignias.ToListAsync();
+            var novasConquistadasRetorno = new List<object>();
 
             foreach (var insignia in insignias)
             {
@@ -165,22 +167,33 @@ namespace SaveRoom.Controllers
 
                 if (atendeuCriterio)
                 {
-                    // Verifica se já tem
                     var jaTem = await _context.Set<InsigniaUsuario>()
                         .AnyAsync(iu => iu.IdPerfil == idPerfil && iu.IdInsignia == insignia.IdInsignia);
 
                     if (!jaTem)
                     {
-                        _context.Set<InsigniaUsuario>().Add(new InsigniaUsuario
+                        var novaInsigniaUsuario = new InsigniaUsuario
                         {
                             IdPerfil = idPerfil,
                             IdInsignia = insignia.IdInsignia,
                             DataConquista = DateTime.UtcNow
+                        };
+
+                        _context.Set<InsigniaUsuario>().Add(novaInsigniaUsuario);
+
+                        // Adiciona na lista de retorno para disparar o pop-up no front-end
+                        novasConquistadasRetorno.Add(new
+                        {
+                            nome = insignia.Nome,
+                            descricao = insignia.Descricao,
+                            iconeUrl = insignia.IconeUrl
                         });
                     }
                 }
             }
             await _context.SaveChangesAsync();
+            
+            return novasConquistadasRetorno; // <--- ESSA LINHA RESOLVE O ERRO CS0161
         }
     }
 }

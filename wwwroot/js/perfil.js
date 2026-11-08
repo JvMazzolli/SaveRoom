@@ -1,31 +1,53 @@
-const API_BASE_URL = "/api";
-const LIMITE_DESCRICAO = 250;
+/**
+ * GERENCIAR E EXIBIR PERFIL - SCRIPT PRINCIPAL
+ * Este script controla o carregamento de dados do usuário, cálculo dinâmico de XP/nível, 
+ * renderização de cards de jogos no backlog, abertura de modais de conquistas, animações 
+ * de pop-up no estilo Steam e listagem dinâmica de insígnias conquistadas.
+ */
 
+// URL base padrão para todas as requisições da API REST do backend C#
+const API_BASE_URL = "/api";
+const LIMITE_DESCRICAO = 250; // Quantidade máxima de caracteres exibidos na descrição de um jogo antes de exigir o botão "Ver mais"
+
+// ==========================================
+// 1. INICIALIZAÇÃO DA PÁGINA (DOM LOADED)
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // Carrega automaticamente o perfil do usuário logado na sessão ao abrir a página
+    // Função: Verifica se a variável global do ID do usuário logado foi injetada pelo Razor na página.
+    // Motivo: Permite carregar automaticamente o perfil da sessão ativa sem que o usuário precise digitar o ID manualmente.
     if (typeof USUARIO_LOGADO_ID !== 'undefined' && USUARIO_LOGADO_ID) {
         const inputId = document.getElementById("perfil-id");
-        if (inputId) inputId.value = USUARIO_LOGADO_ID;
-        carregarPerfilEBacklog(USUARIO_LOGADO_ID);
+        if (inputId) inputId.value = USUARIO_LOGADO_ID; // Preenche o campo de input de busca (se existir na tela)
+        carregarPerfilEBacklog(USUARIO_LOGADO_ID); // Dispara a carga inicial do perfil e backlog
     }
 
+    // Função: Configura o evento de clique no botão de busca manual de perfil por ID.
+    // Motivo: Permite testar ou visualizar o perfil de qualquer ID digitado no campo de input de teste.
     const btnBuscarPerfil = document.getElementById("buscar-perfil");
     btnBuscarPerfil?.addEventListener("click", () => {
         const idPerfil = document.getElementById("perfil-id").value;
         if (!idPerfil) {
-            alert("Informe um perfil");
+            alert("Informe um perfil"); // Validação básica caso o campo esteja vazio
             return;
         }
         carregarPerfilEBacklog(idPerfil);
     });
 
-    // Redirecionamento do botão Gerenciar Perfil
+    // Função: Adiciona evento de redirecionamento ao clicar no botão "Gerenciar Perfil".
+    // Motivo: Facilita a navegação do usuário da página principal do perfil para a tela de edição de avatares/banners.
     const btnManageProfile = document.getElementById("manage-profile");
     btnManageProfile?.addEventListener("click", () => {
-        window.location.href = "/Usuario/Gerenciar"; // Ajuste conforme a sua rota MVC
+        window.location.href = "/Usuario/Gerenciar"; // Rota padrão mapeada no ASP.NET Core MVC
     });
 });
 
+
+// ==========================================
+// 2. CARREGAMENTO DE DADOS DO PERFIL E BACKLOG
+// ==========================================
+
+// Função: Realiza a requisição assíncrona GET na API para buscar os dados consolidados do perfil e seu backlog.
+// Motivo: Centraliza a comunicação com o backend e distribui os dados para as funções de preenchimento visual.
 async function carregarPerfilEBacklog(idPerfil) {
     try {
         const response = await fetch(`${API_BASE_URL}/Usuarios/perfil/${idPerfil}`);
@@ -36,6 +58,7 @@ async function carregarPerfilEBacklog(idPerfil) {
 
         const perfil = await response.json();
 
+        // Distribui os dados recebidos para as funções de renderização da interface
         preencherPerfil(perfil);
         renderizarBacklog(perfil.backlog ?? []);
 
@@ -44,7 +67,15 @@ async function carregarPerfilEBacklog(idPerfil) {
     }
 }
 
+
+// ==========================================
+// 3. PREENCHIMENTO DA INTERFACE DO PERFIL (DADOS, XP E NÍVEL)
+// ==========================================
+
+// Função: Mapeia o JSON do perfil recebido da API para os elementos HTML da página principal.
+// Motivo: Atualiza dinamicamente nome, bio, avatares, barra de progresso de nível, estatísticas e insígnias.
 function preencherPerfil(perfil) {
+    // Atualiza o nickname e ID exibidos no cabeçalho estilo Steam
     document.getElementById("username").textContent = perfil.nickname ?? "Usuário";
     document.getElementById("user-id").textContent = perfil.idPerfil ?? "";
 
@@ -53,10 +84,12 @@ function preencherPerfil(perfil) {
         tituloPerfil.textContent = perfil.titulo ?? "Velha Guarda";
     }
 
+    // Define a imagem do avatar do usuário se houver URL válida cadastrada
     if (perfil.avatar && perfil.avatar.imagemUrl) {
         document.getElementById("avatar").src = perfil.avatar.imagemUrl;
     }
 
+    // Define a imagem de fundo (banner) do topo do perfil
     if (perfil.banner && perfil.banner.imageUrl) {
         document.getElementById("banner-img").src = perfil.banner.imageUrl;
     }
@@ -64,30 +97,28 @@ function preencherPerfil(perfil) {
     const backlog = perfil.backlog ?? [];
 
     // --- CÁLCULO DINÂMICO DE XP E NÍVEIS ---
-    // Regra: 
-    // - Cada jogo no backlog/adicionado = 100 XP
-    // - Cada jogo platinado/concluído = 250 XP adicionais
+    // Regra de Negócio:
+    // - Cada jogo adicionado no backlog = 100 XP
+    // - Cada jogo com status platinado/concluído/finalizado = 250 XP adicionais
     let totalJogos = backlog.length;
     let totalPlatinados = backlog.filter(jogo => {
         const status = (jogo.status || '').toLowerCase();
         return status === 'platinado' || status === 'concluido' || status === 'finalizado';
     }).length;
 
-    // Se houver estatísticas da API, podemos usar como fallback ou base, mas calculamos o XP real:
     let xpCalculado = (totalJogos * 100) + (totalPlatinados * 250);
     
-    // Se o perfil já mandar um xpAtual base do banco, você pode somar ou usar direto. 
-    // Aqui usamos o XP calculado pelas regras do seu backlog + um bônus base da conta:
+    // Soma o XP calculado pelas regras do backlog com um bônus base de criação de conta (200 XP)
     const xpBaseConta = perfil.xpAtualBase ?? 200; 
     const xpTotalAcumulado = xpBaseConta + xpCalculado;
 
-    // Cada nível exige 1000 XP para subir (ex: Nível = 1 + floor(XP / 1000))
+    // Regra de Nível: Cada nível exige exatamente 1000 XP para subir (Nível 1 + floor(XP Total / 1000))
     const nivelCalculado = Math.floor(xpTotalAcumulado / 1000) + 1;
     const xpAtualNoNivel = xpTotalAcumulado % 1000;
     const xpProximoNivel = 1000;
     const porcentagemXp = Math.min(100, Math.round((xpAtualNoNivel / xpProximoNivel) * 100));
 
-    // Atualiza Nível na Interface
+    // Atualiza visualmente os elementos de Nível e Barra de XP na Interface
     const levelElement = document.getElementById("level");
     if (levelElement) levelElement.textContent = nivelCalculado;
     
@@ -101,7 +132,7 @@ function preencherPerfil(perfil) {
         levelBarFill.style.width = `${porcentagemXp}%`;
     }
 
-    // Bio e Links
+    // Preenche a biografia (Sobre mim) e links sociais do usuário
     const userBio = document.getElementById("user-bio");
     if (userBio) {
         userBio.textContent = perfil.bio ?? "Bem-vindo ao meu perfil no SAVEROOM!";
@@ -122,22 +153,42 @@ function preencherPerfil(perfil) {
         }
     }
 
-    // Estatísticas Atualizadas Dinamicamente com os dados reais
+    // Atualiza dinamicamente a caixinha lateral de estatísticas da conta
     document.getElementById("stat-level").textContent = nivelCalculado;
     document.getElementById("stat-achievements").textContent = perfil.estatisticas?.totalConquistas ?? (totalPlatinados * 33 + totalJogos * 5);
     document.getElementById("stat-backlog").textContent = totalJogos;
     document.getElementById("stat-platinums").textContent = totalPlatinados;
+
+    // Função: Dispara a busca das insígnias conquistadas pelo usuário para preencher o bloco dinâmico na Home.
+    // Motivo: Substitui os crachás estáticos da interface pelos ícones reais calculados no banco de dados.
+    carregarInsigniasDoPerfilNaHome(perfil.idPerfil);
 }
 
+
+// ==========================================
+// 4. MANIPULAÇÃO DE TEXTOS E PLATAFORMAS DOS JOGOS
+// ==========================================
+
+// Função: Remove tags HTML acidentais e normaliza espaços em branco em descrições longas vindas da API RAWG.
+// Motivo: Garante que o texto exibido nos cards do backlog fique limpo e sem quebras de layout.
 function limparDescricao(texto) {
     return (texto || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
+// Função: Transforma a string de plataformas separadas por vírgula em um array limpo.
+// Motivo: Permite iterar e exibir as tags de plataforma individuais de forma organizada nos cards.
 function obterPlataformas(jogo) {
     if (!jogo.plataformas) return [];
     return jogo.plataformas.split(",").map(p => p.trim()).filter(Boolean);
 }
 
+
+// ==========================================
+// 5. RENDERIZAÇÃO DOS CARDS DE JOGOS (BACKLOG)
+// ==========================================
+
+// Função: Gera o código HTML dinâmico para estruturar um card individual de jogo no estilo Steam.
+// Motivo: Constrói a capa, título, status, descrição truncada, botão "Ver mais", barra de progresso de conquistas e botão de modal.
 function criarCardJogo(jogo, index) {
     const descricaoCompleta = limparDescricao(jogo.descricao);
     const descricaoCurta = descricaoCompleta.length > LIMITE_DESCRICAO
@@ -150,6 +201,7 @@ function criarCardJogo(jogo, index) {
     const statusLower = (jogo.status || '').toLowerCase();
     const estaPlatinado = statusLower === 'platinado' || statusLower === 'concluido' || statusLower === 'finalizado';
     
+    // Simulação controlada de contagem de conquistas baseada no ID do jogo para manter consistência visual
     const seed = jogoId || 1;
     const totalConquistas = (seed * 13) % 31 + 20; 
     const totalAlcancadas = estaPlatinado ? totalConquistas : ((seed * 7) % (totalConquistas + 1));
@@ -196,6 +248,8 @@ function criarCardJogo(jogo, index) {
     `;
 }
 
+// Função: Varre a lista de jogos do backlog e injeta os cards gerados no container HTML principal.
+// Motivo: Exibe a lista completa de atividades e jogos do perfil na tela, limpando o estado anterior.
 function renderizarBacklog(backlog) {
     const activityList = document.getElementById("activity-list");
     activityList.innerHTML = "";
@@ -208,6 +262,8 @@ function renderizarBacklog(backlog) {
     });
 }
 
+// Função: Alterna entre exibir o texto completo ou truncado da descrição de um jogo ao clicar em "Ver mais / Ver menos".
+// Motivo: Melhora a legibilidade e evita que cards longos quebrem o design da página.
 function alternarDescricao(index) {
     const descricao = document.getElementById(`descricao-${index}`);
     const botao = document.querySelectorAll(".see-more")[index];
@@ -220,6 +276,13 @@ function alternarDescricao(index) {
     }
 }
 
+
+// ==========================================
+// 6. MODAL DE DETALHES DE CONQUISTAS DOS JOGOS
+// ==========================================
+
+// Função: Busca na API as conquistas detalhadas de um jogo específico e abre o modal correspondente.
+// Motivo: Permite visualizar quais conquistas o usuário desbloqueou e a porcentagem global de raridade.
 async function abrirModalConquistas(idJogo, statusJogo = '') {
     const idPerfil = document.getElementById("perfil-id")?.value || USUARIO_LOGADO_ID;
 
@@ -244,12 +307,14 @@ async function abrirModalConquistas(idJogo, statusJogo = '') {
             porcentagemGeral = 100;
         }
 
+        // Preenche os dados do cabeçalho e barra de progresso do modal
         document.getElementById("modal-game-cover").src = data.capaUrl || "/img/sem-capa.jpg";
         document.getElementById("modal-game-name").textContent = data.nomeJogo.toUpperCase();
         document.getElementById("modal-progress-text").textContent = `${totalAlcancadas} DE ${data.totalConquistas} CONQUISTAS ALCANÇADAS`;
         document.getElementById("modal-progress-percent").textContent = `(${porcentagemGeral}%)`;
         document.getElementById("modal-bar-fill").style.width = `${porcentagemGeral}%`;
 
+        // Renderiza a lista de itens de conquistas dentro do modal
         const listaContainer = document.getElementById("steam-achievements-list");
         listaContainer.innerHTML = listaConquistas.map(conq => `
             <div class="steam-achievement-item" style="opacity: ${conq.conquistado ? '1' : '0.6'};">
@@ -265,6 +330,7 @@ async function abrirModalConquistas(idJogo, statusJogo = '') {
             </div>
         `).join("");
 
+        // Exibe o modal na tela alterando seu display para flex
         document.getElementById("modal-conquistas").style.display = "flex";
 
     } catch (error) {
@@ -273,9 +339,129 @@ async function abrirModalConquistas(idJogo, statusJogo = '') {
     }
 }
 
+// Função: Oculta o modal de conquistas da tela.
+// Motivo: Permite fechar a janela flutuante ao clicar no botão "X".
 function fecharModalConquistas() {
     const modal = document.getElementById("modal-conquistas");
     if (modal) {
         modal.style.display = "none";
+    }
+}
+
+
+// ==========================================
+// 7. SISTEMA DE ANIMAÇÃO DE POP-UP 
+// ==========================================
+
+// ==========================================
+// 7. SISTEMA DE ANIMAÇÃO DE POP-UP 
+// ==========================================
+
+let achievementTimeout = null;
+
+// Função: Aciona a animação de notificação no canto inferior direito da tela ao desbloquear uma insígnia/conquista.
+// Motivo: Replica fielmente o feedback visual de conquistas da Steam quando o usuário atinge uma meta.
+function mostrarAnimacaoConquista(titulo, descricao, iconeUrl) {
+    const popup = document.getElementById("steamAchievementPopup");
+    const titleEl = document.getElementById("popupTitle");
+    const descEl = document.getElementById("popupDesc");
+    const iconEl = document.getElementById("popupIcon");
+
+    if (!popup || !titleEl || !descEl || !iconEl) return;
+
+    // Cancela o temporizador anterior caso já exista um pop-up visível para evitar conflito de tempo
+    if (achievementTimeout) clearTimeout(achievementTimeout);
+
+    // Injeta os dados da insígnia no elemento do pop-up
+    titleEl.textContent = titulo;
+    descEl.textContent = descricao;
+
+    // Trata o link do ícone: se começar com http (CDN externo), usa direto; senão, formata como caminho interno ou fallback
+    if (iconeUrl) {
+        iconEl.src = iconeUrl.startsWith("http") ? iconeUrl : "/" + iconeUrl.replace(/^\/+/, "");
+    } else {
+        iconEl.src = "/img/insignias/default.png";
+    }
+
+    // Adiciona a classe 'show' para disparar a animação CSS de subida na tela
+    popup.classList.add("show");
+
+    // Remove a classe 'show' após 4 segundos para esconder o pop-up automaticamente
+    achievementTimeout = setTimeout(() => {
+        popup.classList.remove("show");
+    }, 4000);
+}
+// ==========================================
+// 8. ADIÇÃO DE JOGOS AO BACKLOG COM GATILHO DE INSÍGNIAS
+// ==========================================
+
+// Função: Envia uma requisição POST para adicionar um jogo ao backlog e processar recompensas.
+// Motivo: Permite registrar novos jogos e capturar o retorno de novas insígnias conquistadas para disparar o pop-up animado.
+async function adicionarJogoAoBacklog(idPerfil, nomeJogo, status) {
+    try {
+        const response = await fetch(`${API}/Backlog/adicionar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idPerfil, nomeJogo, status })
+        });
+
+        if (!response.ok) throw new Error("Erro ao adicionar jogo.");
+
+        const resultado = await response.json();
+        
+        // Sucesso ao adicionar
+        console.log(resultado.mensagem);
+
+        // --- VERIFICA SE HOUVE NOVAS CONQUISTAS DESBLOQUEADAS ---
+        if (resultado.novasInsignias && resultado.novasInsignias.length > 0) {
+            resultado.novasInsignias.forEach((insignia, index) => {
+                setTimeout(() => {
+                    mostrarAnimacaoConquista(insignia.nome, insignia.descricao, insignia.iconeUrl);
+                }, index * 4500);
+            });
+        }
+
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+}
+
+
+// ==========================================
+// 9. RENDERIZAÇÃO DINÂMICA DE INSÍGNIAS NA HOME DO PERFIL
+// ==========================================
+
+// Função: Busca as insígnias conquistadas pelo usuário e as exibe dinamicamente na caixinha lateral da página principal.
+// Motivo: Elimina a necessidade de elementos estáticos na interface, atualizando os ícones de acordo com o progresso real no banco.
+async function carregarInsigniasDoPerfilNaHome(idPerfil) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/Usuarios/perfil/${idPerfil}/insignias`);
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const container = document.getElementById("badges-row");
+        const countEl = document.getElementById("badges-count");
+
+        if (!container) return;
+
+        // Filtra apenas as insígnias que possuem a flag 'conquistada: true'
+        const conquistadas = data.todas.filter(i => i.conquistada);
+
+        if (countEl) countEl.textContent = conquistadas.length;
+
+        if (conquistadas.length === 0) {
+            container.innerHTML = `<span style="font-size: 0.8rem; color: var(--secondary);">Nenhuma insígnia conquistada ainda.</span>`;
+            return;
+        }
+
+        // Gera o HTML dos ícones reais das insígnias e insere no container da página
+        container.innerHTML = conquistadas.map(insignia => `
+            <div class="badge-item icon" title="${insignia.nome} - ${insignia.descricao}" style="background: rgba(102, 192, 244, 0.15); border: 1px solid rgba(102, 192, 244, 0.3); border-radius: 6px; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                <img src="${insignia.iconeUrl}" alt="${insignia.nome}" style="width: 24px; height: 24px; object-fit: contain;">
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error("Erro ao carregar insígnias na home:", error);
     }
 }

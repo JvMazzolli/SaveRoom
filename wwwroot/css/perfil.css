@@ -794,3 +794,30 @@ body {
     flex-direction: column;
     gap: 10px;
 }
+
+/* --- POPUP DE CONQUISTA DESBLOQUEADA --- */
+.achievement-popup {
+    position: fixed;
+    bottom: -150px; /* Garante que comece totalmente fora da tela */
+    right: 30px;
+    background: linear-gradient(135deg, #1b2838, #121822);
+    border: 1px solid #66c0f4;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    color: #fff;
+    z-index: 99999; /* Camada extremamente alta para sobrepor qualquer modal ou elemento */
+    width: 320px;
+    opacity: 0;
+    visibility: hidden; /* Garante que fique oculto por padrão */
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.achievement-popup.show {
+    bottom: 30px; /* Sobe para a tela */
+    opacity: 1;
+    visibility: visible; /* Torna visível no momento da animação */
+}
