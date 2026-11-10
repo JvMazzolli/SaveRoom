@@ -814,6 +814,7 @@ body {
 .game-status option:checked {
     background-color: #1b65bd;
     color: #ffffff;
+}
 /* --- POPUP DE CONQUISTA DESBLOQUEADA --- */
 .achievement-popup {
     position: fixed;
