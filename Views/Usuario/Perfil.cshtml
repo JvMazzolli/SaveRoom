@@ -103,30 +103,23 @@
                 </div>
             </div>
 
-            <!-- BLOCO DE ATALHOS / INSÍGNIAS (ESTILO STEAM) -->
+           
+            <!-- BLOCO DE INSÍGNIAS (DINÂMICO) -->
             <div class="steam-badges-box">
                 <div class="badges-header">
                     <span>Insígnias</span>
-                    <span class="badges-count">3</span>
+                    <span id="badges-count" class="badges-count">0</span>
                 </div>
-                <div class="badges-row">
-                    <div class="badge-item lvl">50+</div>
-                    <div class="badge-item num">1</div>
-                    <div class="badge-item icon">🎮</div>
+                <div id="badges-row" class="badges-row">
+                    <!-- As insígnias conquistadas serão injetadas dinamicamente aqui via JS -->
+                    <span style="font-size: 0.8rem; color: var(--secondary);">Carregando insígnias...</span>
                 </div>
             </div>
         </div>
 
     </section>
 
-    <!-- TESTE POR ID (MODO TESTE) -->
-    <section class="dev-tools">
-        <h3>Buscar Perfil (Modo Teste)</h3>
-        <div class="backlog-search">
-            <input type="number" id="perfil-id" placeholder="Digite o ID do perfil">
-            <button id="buscar-perfil">Carregar Perfil</button>
-        </div>
-    </section>
+
 
     <!-- ATIVIDADES RECENTES / BACKLOG -->
     <section class="activities">
@@ -160,6 +153,17 @@
                 <button class="steam-tab">CONQUISTAS GLOBAIS</button>
             </div>
             <div id="steam-achievements-list" class="steam-achievements-list"></div>
+        </div>
+    </div>
+    <!-- POPUP DE CONQUISTA DESBLOQUEADA (ESTILO STEAM) -->
+    <div id="steamAchievementPopup" class="achievement-popup">
+        <div class="achievement-icon-container">
+            <img id="popupIcon" src="/img/insignias/default.png" alt="Ícone da Conquista">
+        </div>
+        <div class="achievement-text-content">
+            <span class="achievement-unlocked-title">Conquista Desbloqueada</span>
+            <h4 id="popupTitle">Nome da Conquista</h4>
+            <p id="popupDesc">Descrição curta da conquista.</p>
         </div>
     </div>
 

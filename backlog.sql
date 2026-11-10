@@ -208,6 +208,7 @@ CREATE TABLE perfil (
     CONSTRAINT fk_perfil_usuario FOREIGN KEY (id_usuario)
         REFERENCES public.usuario(id_usuario) ON DELETE CASCADE
 );
+
 CREATE TABLE jogo (
     id_jogo SERIAL PRIMARY KEY,
     nome VARCHAR(200) NOT NULL,
@@ -327,21 +328,28 @@ CREATE TABLE insignia (
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
     icone_url TEXT NOT NULL,
-    criterio_tipo VARCHAR(50) NOT NULL, -- ex: 'JOGOS_ADICIONADOS', 'JOGOS_PLATINADOS'
-    criterio_valor INT NOT NULL          -- ex: 1, 10, 20, 50
+    criterio_tipo VARCHAR(50) NOT NULL, 
+    criterio_valor INT NOT NULL         
 );
 
--- 2. Tabela de insígnias conquistadas por cada perfil
-CREATE TABLE insignia_usuario (
-    id_insignia INT NOT NULL,
-    id_perfil INT NOT NULL,
-    data_conquista TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_insignia, id_perfil),
-    CONSTRAINT fk_insignia_usuario_insignia FOREIGN KEY (id_insignia)
-        REFERENCES public.insignia(id_insignia) ON DELETE CASCADE,
-    CONSTRAINT fk_insignia_usuario_perfil FOREIGN KEY (id_perfil)
-        REFERENCES public.perfil(id_perfil) ON DELETE CASCADE
-);
+-- 2. VIEW INTELIGENTE: Substitui a tabela física e calcula as insígnias automaticamente em tempo real
+CREATE OR REPLACE VIEW insignia_usuario AS
+SELECT 
+    i.id_insignia,
+    p.id_perfil,
+    CURRENT_TIMESTAMP AS data_conquista
+FROM perfil p
+CROSS JOIN insignia i
+WHERE 
+    (i.criterio_tipo = 'JOGOS_ADICIONADOS' AND (
+        SELECT COUNT(*) FROM backlog b WHERE b.id_perfil = p.id_perfil
+    ) >= i.criterio_valor)
+    OR
+    ((i.criterio_tipo = 'JOGOS_PLATINADOS' OR i.criterio_tipo = 'JOGOS_CONCLUIDOS') AND (
+        SELECT COUNT(*) FROM backlog b 
+        WHERE b.id_perfil = p.id_perfil 
+          AND (LOWER(b.status) = 'platinado' OR LOWER(b.status) = 'concluido' OR LOWER(b.status) = 'finalizado')
+    ) >= i.criterio_valor);
 
 -- 3. Adicionar coluna na tabela perfil para armazenar a insígnia em destaque selecionada
 ALTER TABLE perfil ADD COLUMN id_insignia_destaque INT;
@@ -356,12 +364,10 @@ INSERT INTO insignia (nome, descricao, icone_url, criterio_tipo, criterio_valor)
 ('Primeiro Sangue', 'Platine o seu primeiro jogo.', 'https://cdn-icons-png.flaticon.com/512/2583/2583344.png', 'JOGOS_PLATINADOS', 1),
 ('Caçador de Platinas', 'Platine 10 jogos.', 'https://cdn-icons-png.flaticon.com/512/3112/3112948.png', 'JOGOS_PLATINADOS', 10);
 
---API OFF-----------------------------------------------------------------------------
-
+-- Inserção unificada de Jogos
 INSERT INTO jogo 
 (id_rawg, nome, descricao, data_lancamento, imagem_capa, imagem_adicional, desenvolvedora, publicadora, rating, metacritic, plataformas)
 VALUES 
--- 1. Grand Theft Auto V
 (
     3498, 
     'Grand Theft Auto V', 
@@ -375,8 +381,6 @@ VALUES
     92, 
     'PC, PlayStation 5, Xbox Series X/S, PlayStation 4, Xbox One'
 ),
-
--- 2. Hollow Knight
 (
     9767, 
     'Hollow Knight', 
@@ -390,8 +394,6 @@ VALUES
     90, 
     'PC, macOS, Linux, Nintendo Switch, PlayStation 4, Xbox One'
 ),
-
--- 3. The Last of Us Part I
 (
     801229, 
     'The Last of Us Part I', 
@@ -404,8 +406,6 @@ VALUES
     4.5, 89, 
     'PlayStation 5, PC'
 ),
-
--- 4. Horizon Zero Dawn
 (
     278, 
     'Horizon Zero Dawn', 
@@ -418,8 +418,6 @@ VALUES
     4.3, 89, 
     'PlayStation 4, PC'
 ),
-
--- 5. Bloodborne
 (
     8012, 
     'Bloodborne', 
@@ -432,8 +430,6 @@ VALUES
     4.4, 92, 
     'PlayStation 4'
 ),
-
--- 6. Super Mario Odyssey
 (
     28568, 
     'Super Mario Odyssey', 
@@ -446,8 +442,6 @@ VALUES
     4.5, 97, 
     'Nintendo Switch'
 ),
-
--- 7. The Legend of Zelda: Breath of the Wild
 (
     22511, 
     'The Legend of Zelda: Breath of the Wild', 
@@ -460,8 +454,6 @@ VALUES
     4.7, 97, 
     'Nintendo Switch, Wii U'
 ),
-
--- 8. Persona 5 Royal
 (
     326238, 
     'Persona 5 Royal', 
@@ -474,8 +466,6 @@ VALUES
     4.8, 95, 
     'PlayStation 5, PlayStation 4, Xbox Series X/S, PC, Switch'
 ),
-
--- 9. Sekiro: Shadows Die Twice
 (
     23585, 
     'Sekiro: Shadows Die Twice', 
@@ -488,8 +478,6 @@ VALUES
     4.5, 90, 
     'PlayStation 4, Xbox One, PC'
 ),
-
--- 10. Ghost of Tsushima
 (
     58023, 
     'Ghost of Tsushima', 
@@ -502,8 +490,6 @@ VALUES
     4.6, 83, 
     'PlayStation 4, PlayStation 5'
 ),
-
--- 11. Marvels Spider-Man Remastered
 (
     58134, 
     'Marvels Spider-Man Remastered', 
@@ -516,8 +502,6 @@ VALUES
     4.5, 87, 
     'PlayStation 5, PlayStation 4, PC'
 ),
-
--- 12. Dark Souls III
 (
     2462, 
     'Dark Souls III', 
@@ -530,8 +514,6 @@ VALUES
     4.4, 89, 
     'PlayStation 4, Xbox One, PC'
 ),
-
--- 13. DOOM Eternal
 (
     25889, 
     'DOOM Eternal', 
@@ -544,8 +526,6 @@ VALUES
     4.6, 88, 
     'PlayStation 4, Xbox One, PC, Nintendo Switch'
 ),
-
--- 14. BioShock Infinite
 (
     10035, 
     'BioShock Infinite', 
@@ -558,8 +538,6 @@ VALUES
     4.4, 94, 
     'PlayStation 4, Xbox One, PC, Nintendo Switch'
 ),
-
--- 15. Mass Effect Legendary Edition
 (
     513256, 
     'Mass Effect Legendary Edition', 
@@ -571,4 +549,139 @@ VALUES
     'Electronic Arts', 
     4.7, 90, 
     'PlayStation 4, Xbox One, PC'
+);
+
+-- Adicionar jogos extras do IGDB / Locais adicionais
+INSERT INTO jogo (nome, descricao, data_lancamento, id_rawg, imagem_capa, desenvolvedora, publicadora, rating, metacritic, plataformas) VALUES
+(
+    'Red Dead Redemption 2', 
+    'Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive.', 
+    '2018-10-26', 
+    28, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co1q43.png', 
+    'Rockstar Games', 
+    'Rockstar Games', 
+    4.8, 
+    97, 
+    'PC, PlayStation 4, Xbox One'
+),
+(
+    'The Witcher 3: Wild Hunt', 
+    'You are Geralt of Rivia, mercenary monster slayer. Ahead of you lies a war-torn, monster-infested continent you can explore at your will.', 
+    '2015-05-18', 
+    3328, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co1wyy.png', 
+    'CD Projekt Red', 
+    'CD Projekt', 
+    4.7, 
+    92, 
+    'PC, PlayStation 4, Xbox One, Nintendo Switch, PlayStation 5, Xbox Series X|S'
+),
+(
+    'Cyberpunk 2077', 
+    'Cyberpunk 2077 is an open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification.', 
+    '2020-12-10', 
+    41494, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co2mtt.png', 
+    'CD Projekt Red', 
+    'CD Projekt', 
+    4.5, 
+    86, 
+    'PC, PlayStation 4, Xbox One, PlayStation 5, Xbox Series X|S'
+),
+(
+    'God of War Ragnarök', 
+    'Fimbulwinter is well underway. Kratos and Atreus must journey to each of the Nine Realms in search of answers as Asgardian forces prepare for a prophesied battle that will end the world.', 
+    '2022-11-09', 
+    119133, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co5s5w.png', 
+    'Santa Monica Studio', 
+    'Sony Interactive Entertainment', 
+    4.8, 
+    94, 
+    'PlayStation 4, PlayStation 5, PC'
+),
+(
+    'Elden Ring', 
+    'Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.', 
+    '2022-02-25', 
+    119171, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.png', 
+    'FromSoftware', 
+    'Bandai Namco Entertainment', 
+    4.8, 
+    96, 
+    'PC, PlayStation 4, Xbox One, PlayStation 5, Xbox Series X|S'
+),
+(
+    'Death Stranding', 
+    'Future, mysterious event known as Death Stranding has opened a doorway between the living and the dead, leading to grotesque creatures from the afterlife roaming the fallen world.', 
+    '2019-11-08', 
+    19102, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co1r7f.png', 
+    'Kojima Productions', 
+    'Sony Interactive Entertainment / 505 Games', 
+    4.5, 
+    82, 
+    'PC, PlayStation 4, PlayStation 5, iOS'
+),
+(
+    'Detroit: Become Human', 
+    'Detroit 2038. Technology has evolved to a point where human-like androids are everywhere. They speak, move and behave like human beings, but they are only machines.', 
+    '2018-05-25', 
+    7975, 
+    'https://images.igdb.com/igdb/image/upload/t_1080p/co1vdp.png', 
+    'Quantic Dream', 
+    'Quantic Dream', 
+    4.6, 
+    78, 
+    'PC, PlayStation 4'
+);
+
+-- Inserção de itens no backlog do perfil (id_perfil = 1)
+INSERT INTO backlog (id_perfil, id_jogo, nome_jogo, metacritic, plataformas, status, data_conclusao) VALUES
+(
+    1, 
+    1, 
+    'Grand Theft Auto V', 
+    92, 
+    'PC, PlayStation 5, Xbox Series X/S, PlayStation 4, Xbox One', 
+    'platinado', 
+    CURRENT_TIMESTAMP
+),
+(
+    1, 
+    2, 
+    'Hollow Knight', 
+    90, 
+    'PC, macOS, Linux, Nintendo Switch, PlayStation 4, Xbox One', 
+    'concluido', 
+    CURRENT_TIMESTAMP
+),
+(
+    1, 
+    3, 
+    'The Last of Us Part I', 
+    89, 
+    'PlayStation 5, PC', 
+    'jogando', 
+    NULL
+),
+(
+    1, 
+    5, 
+    'Bloodborne', 
+    92, 
+    'PlayStation 4', 
+    'a_jogar', 
+    NULL
+),
+(
+    1, 
+    9, 
+    'Sekiro: Shadows Die Twice', 
+    90, 
+    'PlayStation 4, Xbox One, PC', 
+    'concluido', 
+    CURRENT_TIMESTAMP
 );

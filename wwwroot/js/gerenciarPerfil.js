@@ -1,5 +1,5 @@
 /**
- * GERENCIAR PERFIL - SCRIPT PRINCIPAL (ESTILO STEAM)
+ * GERENCIAR PERFIL - SCRIPT PRINCIPAL 
  * Gerencia a troca de abas, carregamento de avatares, banners, bio, nickname e insígnias.
  */
 
@@ -372,5 +372,35 @@ async function salvarPerfil() {
             btn.textContent = originalText;
             btn.disabled = false;
         }
+    }
+}
+
+async function adicionarJogoAoBacklog(idPerfil, nomeJogo, status) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/Backlog/adicionar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ idPerfil, nomeJogo, status })
+        });
+
+        if (!response.ok) throw new Error("Erro ao adicionar jogo.");
+
+        const resultado = await response.json();
+        
+        // Sucesso ao adicionar
+        console.log(resultado.mensagem);
+
+        // --- VERIFICA SE HOUVE NOVAS CONQUISTAS DESBLOQUEADAS ---
+        if (resultado.novasInsignias && resultado.novasInsignias.length > 0) {
+            resultado.novasInsignias.forEach((insignia, index) => {
+                // Se houver mais de uma, faz um pequeno delay entre elas para não sobrepor
+                setTimeout(() => {
+                    mostrarAnimacaoConquista(insignia.nome, insignia.descricao, insignia.iconeUrl);
+                }, index * 4500);
+            });
+        }
+
+    } catch (error) {
+        console.error("Erro:", error);
     }
 }

@@ -53,6 +53,20 @@ namespace SaveRoom.Data
                 .WithMany()
                 .HasForeignKey(p => p.IdInsigniaDestaque)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<InsigniaUsuario>()
+                .ToView("insignia_usuario")
+                .HasKey(iu => new { iu.IdInsignia, iu.IdPerfil });
+
+            modelBuilder.Entity<InsigniaUsuario>()
+                .HasOne(iu => iu.Insignia)
+                .WithMany(i => i.InsigniasUsuarios)
+                .HasForeignKey(iu => iu.IdInsignia);
+
+            modelBuilder.Entity<InsigniaUsuario>()
+                .HasOne(iu => iu.Perfil)
+                .WithMany()
+                .HasForeignKey(iu => iu.IdPerfil);
         }
     }
 }
