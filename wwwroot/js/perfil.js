@@ -9,6 +9,72 @@
 const API_BASE_URL = "/api";
 const LIMITE_DESCRICAO = 250; // Quantidade máxima de caracteres exibidos na descrição de um jogo antes de exigir o botão "Ver mais"
 
+let PERFIL_ATUAL_ID = null;
+
+const OPCOES_STATUS = [
+    { valor: "a_jogar", texto: "QUERO JOGAR" },
+    { valor: "jogando", texto: "JOGANDO" },
+    { valor: "concluido", texto: "JOGADO" },
+    { valor: "platinado", texto: "PLATINADO" },
+    { valor: "abandonado", texto: "ABANDONADO" }
+];
+
+const STATUS_PERMITIDOS = OPCOES_STATUS.map(opcao => opcao.valor);
+
+// Recupera os status salvos no navegador para determinado perfil.
+function carregarStatusLocalmente(idPerfil) {
+    try {
+        const chave = `saveroom_status_perfil_${idPerfil}`;
+
+        return JSON.parse(localStorage.getItem(chave)) || {};
+
+    } catch (erro) {
+        console.error("Erro ao recuperar status locais:", erro);
+        return {};
+    }
+}
+
+// Salva a alteração do status no navegador.
+function salvarStatusLocal(select) {
+
+    const idBacklog = select.dataset.idBacklog;
+    const statusAnterior = select.dataset.statusAtual;
+    const novoStatus = select.value;
+
+    if (!PERFIL_ATUAL_ID || !idBacklog ||
+        !STATUS_PERMITIDOS.includes(novoStatus)) {
+
+        select.value = statusAnterior;
+        return;
+    }
+
+    try {
+
+        const chave = `saveroom_status_perfil_${PERFIL_ATUAL_ID}`;
+
+        const statusSalvos = carregarStatusLocalmente(PERFIL_ATUAL_ID);
+
+        statusSalvos[idBacklog] = novoStatus;
+
+        localStorage.setItem(chave, JSON.stringify(statusSalvos));
+
+        select.dataset.statusAtual = novoStatus;
+        select.title = "Status salvo neste navegador";
+
+        console.log("Status salvo localmente:", novoStatus);
+
+    } catch (erro) {
+
+        console.error("Erro ao salvar status:", erro);
+
+        select.value = statusAnterior;
+
+        alert("Não foi possível salvar o status neste navegador.");
+    }
+}
+
+
+
 // ==========================================
 // 1. INICIALIZAÇÃO DA PÁGINA (DOM LOADED)
 // ==========================================
@@ -58,9 +124,32 @@ async function carregarPerfilEBacklog(idPerfil) {
 
         const perfil = await response.json();
 
+        // Identifica o perfil atual.
+        PERFIL_ATUAL_ID = perfil.idPerfil;
+
+        // Recupera as alterações guardadas no navegador.
+        const statusLocais = carregarStatusLocalmente(PERFIL_ATUAL_ID);
+
+        // Aplica os status locais aos jogos recebidos da API.
+        perfil.backlog = (perfil.backlog ?? []).map(jogo => {
+
+            const idBacklog = jogo.idBacklog ?? jogo.IdBacklog;
+            const statusLocal = statusLocais[idBacklog];
+
+            if (STATUS_PERMITIDOS.includes(statusLocal)) {
+                return {
+                    ...jogo,
+                    status: statusLocal
+                };
+            }
+
+            return jogo;
+        });
+
+        // Atualiza a interface.
         // Distribui os dados recebidos para as funções de renderização da interface
         preencherPerfil(perfil);
-        renderizarBacklog(perfil.backlog ?? []);
+        renderizarBacklog(perfil.backlog);
 
     } catch (error) {
         console.error("Erro:", error);
@@ -198,7 +287,20 @@ function criarCardJogo(jogo, index) {
     const plataformas = obterPlataformas(jogo);
     const jogoId = jogo.idJogo ?? jogo.IdJogo ?? jogo.id ?? jogo.Id ?? jogo.idGame;
     
-    const statusLower = (jogo.status || '').toLowerCase();
+    const idBacklog = jogo.idBacklog ?? jogo.IdBacklog;
+
+    let statusLower = (jogo.status || 'a_jogar').toLowerCase();
+
+    if (statusLower === "finalizado") {
+        statusLower = "concluido";
+    }
+
+    const htmlOpcoesStatus = OPCOES_STATUS.map(opcao => `
+        <option value="${opcao.valor}"
+            ${statusLower === opcao.valor ? "selected" : ""}>
+            ${opcao.texto}
+        </option>
+    `).join("");
     const estaPlatinado = statusLower === 'platinado' || statusLower === 'concluido' || statusLower === 'finalizado';
     
     // Simulação controlada de contagem de conquistas baseada no ID do jogo para manter consistência visual
@@ -213,7 +315,17 @@ function criarCardJogo(jogo, index) {
             <div class="game-content">
                 <div class="game-header">
                     <h2>${jogo.nomeJogo}</h2>
-                    <span class="game-status">${jogo.status || "Backlog"}</span>
+                   <select
+                    class="game-status"
+                    data-id-backlog="${idBacklog ?? ""}"
+                    data-status-atual="${statusLower}"
+                    onchange="salvarStatusLocal(this)"
+                    onclick="event.stopPropagation()"
+                    aria-label="Status do jogo"
+                    title="Selecione o status do jogo"
+                >
+                    ${htmlOpcoesStatus}
+                </select>
                 </div>
                 <p id="descricao-${index}" class="game-description" data-full="${descricaoCompleta.replace(/"/g,'&quot;')}" data-short="${descricaoCurta.replace(/"/g,'&quot;')}">
                     ${descricaoCurta}

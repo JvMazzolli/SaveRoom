@@ -795,6 +795,25 @@ body {
     gap: 10px;
 }
 
+/* Aparência do seletor de status dos jogos */
+.game-status {
+    background-color: #172431 !important;
+    color: #66c0f4 !important;
+    border: 1px solid #31536b;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Fundo das opções abertas */
+.game-status option {
+    background-color: #172431;
+    color: #66c0f4;
+}
+
+/* Opção selecionada */
+.game-status option:checked {
+    background-color: #1b65bd;
+    color: #ffffff;
 /* --- POPUP DE CONQUISTA DESBLOQUEADA --- */
 .achievement-popup {
     position: fixed;
